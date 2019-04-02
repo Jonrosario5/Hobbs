@@ -4,6 +4,8 @@ from models import Hobby
 from models import User
 
 from wtforms import StringField, PasswordField, TextAreaField, DateTimeField, BooleanField,SubmitField,HiddenField
+from wtforms.widgets import ListWidget, CheckboxInput
+
 
 from wtforms.validators import (DataRequired, Regexp, ValidationError, Email,Length, EqualTo,Required)
 from wtforms.fields.html5 import DateTimeField
@@ -72,7 +74,7 @@ class EventForm(Form):
     hobby=StringField('Hobby')
 
 class Edit_UserForm(Form):
-    user = StringField("User")
+    username = StringField("User")
     fullname = StringField("Fullname")
     bio = TextAreaField("Bio")
     

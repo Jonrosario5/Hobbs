@@ -62,7 +62,7 @@ def register():
             dob=request.form.get('dob'),
             password=form.password.data
         )
-        return redirect(url_for('testing'))
+        return redirect(url_for('login'))
     return render_template('signup.html', form=form)
 
 @app.route('/login',methods=['POST','GET'])
@@ -80,16 +80,17 @@ def login():
                 flash("You've been logged in", "success")
                 user_id = user.id
 
-                return redirect(url_for('testing'))
+                return redirect(url_for('user_profile'))
             else:
                 flash("your email or password doesn't match", "error")
     return render_template('login.html', form=form)
+
 
 @app.route('/logout',methods=['POST','GET'])
 def logout():
     logout_user()
     flash("You've been logged out", 'success')
-    return redirect(url_for('testing'))
+    return redirect(url_for('login'))
 
 
 
@@ -124,12 +125,79 @@ def events():
     return render_template('event.html',form=form)
 
 @app.route('/profile',methods=['GET','POST'])
-@app.route('/profile/<userid>')
 def user_profile():
     user = g.user._get_current_object()
-    form = forms.Edit_UserForm
+    user_id = g.user._get_current_object().id
+    form = forms.Edit_UserForm()
+    hobbies = models.Hobby.select()
+    user_hobbies = models.User_Hobby.select().where(models.User_Hobby.user == user_id)
 
-    render_template ('profile.html',form=form,user=user)
+
+    return render_template ('profile.html',form=form,user=user,hobbies=hobbies,user_hobbies=user_hobbies)
+
+
+@app.route('/userupdate',methods=['GET','POST'])
+def edit_user():
+    form = forms.Edit_UserForm()
+    user_id = g.user._get_current_object().id
+    print(user_id)
+    print(form.bio.data)
+
+    if form.validate_on_submit:
+        update_user = (models.User.update(
+            {models.User.fullname: form.fullname.data,
+            models.User.username: form.username.data,
+            models.User.bio: form.bio.data})
+            .where(models.User.id == user_id))
+        print(update_user)
+
+        update_user.execute()
+
+        return redirect(url_for('user_profile'))
+
+@app.route('/deleteuser',methods=["GET", "POST"])
+def delete_user():
+    user_id = g.user._get_current_object().id
+    delete_user_button = models.User.delete().where(models.User.id == user_id)
+    delete_user_button.execute()
+
+    return redirect('signup')
+
+@app.route('/userhobbies/<hobbyid>',methods=["GET","POST"])
+def add_user_hobbies(hobbyid=None):
+    user_id = g.user._get_current_object().id
+
+
+    if hobbyid != None:
+        user_hobbies_count = models.User_Hobby.select().where((models.User_Hobby.user_id == user_id)
+                                                              & (models.User_Hobby.hobby_id == hobbyid)).count()
+        if user_hobbies_count > 0:
+            flash('Already Exists')
+            print('Working')
+            return redirect(url_for('user_profile'))
+
+        else:
+            models.User_Hobby.create_user_hobby(
+                user=user_id,
+                hobby=hobbyid
+            )
+            return redirect(url_for('user_profile'))
+
+    return redirect(url_for('user_profile'))
+
+@app.route('/remove_user_hobbies/<user_hobbyid>',methods=["GET","POST"])
+def delete_user_hobbies(user_hobbyid=None):
+    userid = g.user._get_current_object().id
+    
+    if user_hobbyid != None:
+        delete_user_hobby = models.User_Hobby.delete().where(models.User_Hobby.user == userid and models.User_Hobby.id == user_hobbyid)
+        delete_user_hobby.execute()
+        
+        return redirect(url_for('user_profile'))
+    
+
+
+
 
 
  

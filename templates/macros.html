@@ -10,3 +10,23 @@
   {{ field(placeholder=field.label.text, class='input') }}
 </div>
 {% endmacro %} 
+
+{% macro render_all_hobbies(hobby) %}
+<div>
+  {{hobby.name}}
+  <br>
+  <a href="{{url_for('add_user_hobbies', hobbyid=hobby.id)}}"><button>Add</button></a>
+</div>
+
+{% endmacro %} 
+
+{% macro render_user_hobbies(user_hobby) %}
+
+<div>
+  {{user_hobby.hobby.name}}
+  <br>
+  <a href="{{url_for('delete_user_hobbies', user_hobbyid=user_hobby.id)}}"><button>Delete</button></a>
+
+</div>
+
+{% endmacro %} 

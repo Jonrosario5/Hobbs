@@ -59,7 +59,8 @@ class User_Hobby(Model):
 
     class Meta:
         database=DATABASE
-
+    
+    @classmethod
     def create_user_hobby(cls,user,hobby):
         cls.create(
             user=user,

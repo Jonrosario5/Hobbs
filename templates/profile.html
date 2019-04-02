@@ -1,3 +1,6 @@
+{% from 'macros.html' import render_field, render_all_hobbies, render_user_hobbies %} {% block content %}
+
+
 <!DOCTYPE html>
  <html class="no-js"> 
     <head>
@@ -11,7 +14,33 @@
     <body>
         <h1>User Profile</h1>
         <h2>{{user.fullname}}</h2>
+        <h3>{{user.username}}</h3>
+        <h3>{{user.bio}}</h3>
+
+        <form method="POST" action="{{ url_for('edit_user')}}">
+        {{form.username (value=user.username)}}
+        {{form.fullname (value=user.fullname)}}
+        {{form.bio (placeholder=user.bio)}}
+        <input type="submit" value="Edit">
+        </form>
+        <a href="{{url_for('delete_user')}}">Delete Account</a>
+        <br>
+        <h2>User Hobbies</h2>
+        User_Hobbies Here
+
+        {% for user_hobby in user_hobbies %}
+        {{ render_user_hobbies(user_hobby) }}
+        {% endfor %}
+
+        <h3>Add Hobbies</h3>
+        <div>
+            {% for hobby in hobbies %}
+            {{ render_all_hobbies(hobby)}}
+            {% endfor %}
+        </div>
+
         
         <script src="" async defer></script>
     </body>
 </html>
+{% endblock %}
