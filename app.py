@@ -35,6 +35,8 @@ def before_request():
     g.db = models.DATABASE
     g.db.connect()
     g.user = current_user
+    
+
 
 
 @app.after_request
@@ -129,11 +131,12 @@ def user_profile():
     user = g.user._get_current_object()
     user_id = g.user._get_current_object().id
     form = forms.Edit_UserForm()
+    hours_spent_form = forms.Hours_SpentForm()
     hobbies = models.Hobby.select()
     user_hobbies = models.User_Hobby.select().where(models.User_Hobby.user == user_id)
 
 
-    return render_template ('profile.html',form=form,user=user,hobbies=hobbies,user_hobbies=user_hobbies)
+    return render_template ('profile.html',form=form,user=user,hobbies=hobbies,user_hobbies=user_hobbies,hours_spent_form=hours_spent_form)
 
 
 @app.route('/userupdate',methods=['GET','POST'])
@@ -194,14 +197,24 @@ def delete_user_hobbies(user_hobbyid=None):
         delete_user_hobby.execute()
         
         return redirect(url_for('user_profile'))
-    
+
+@app.route('/hours_spent/<user_hobbyid>',methods=["GET","POST"])
+def hours_spent_increment(user_hobbyid=None):
+    userid = g.user._get_current_object().id
+    form = forms.Hours_SpentForm()
+
+    if user_hobbyid != None:
+        print("jello")
+        if form.validate_on_submit:
+            print('hello')
+            increment_hobby_hours = models.User_Hobby.update(
+               {models.User_Hobby.hours_spent:form.hours_spent}).where(
+                   models.User_Hobby.id == user_hobbyid)
+            increment_hobby_hours.execute()
 
 
-
-
-
- 
-
+    return redirect(url_for('user_profile'))
+                                            
 
 if __name__ == '__main__':
     models.initialize()

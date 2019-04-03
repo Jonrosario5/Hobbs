@@ -56,15 +56,17 @@ class User(UserMixin, Model):
 class User_Hobby(Model):
     user=ForeignKeyField(model=User, backref="user")
     hobby=ForeignKeyField(model=Hobby, backref="hobby")
+    hours_spent= BigIntegerField()
 
     class Meta:
         database=DATABASE
     
     @classmethod
-    def create_user_hobby(cls,user,hobby):
+    def create_user_hobby(cls,user,hobby,hours_spent=0):
         cls.create(
             user=user,
-            hobby=hobby
+            hobby=hobby,
+            hours_spent=hours_spent
         )
 class User_Friend(Model):
     user=ForeignKeyField(model=User, backref="user")

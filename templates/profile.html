@@ -29,7 +29,7 @@
         User_Hobbies Here
 
         {% for user_hobby in user_hobbies %}
-        {{ render_user_hobbies(user_hobby) }}
+        {{ render_user_hobbies(user_hobby,hours_spent_form) }}
         {% endfor %}
 
         <h3>Add Hobbies</h3>

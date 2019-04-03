@@ -20,12 +20,19 @@
 
 {% endmacro %} 
 
-{% macro render_user_hobbies(user_hobby) %}
+{% macro render_user_hobbies(user_hobby,hours_spent_form) %}
 
 <div>
   {{user_hobby.hobby.name}}
+  {{user_hobby.hours_spent}}
+  {{hours_spent_form.hours_spent}}
+  <a href="{{url_for('hours_spent_increment', user_hobbyid=user_hobby.id)}}">
+    <button>+</button>
+  </a> 
+
   <br>
-  <a href="{{url_for('delete_user_hobbies', user_hobbyid=user_hobby.id)}}"><button>Delete</button></a>
+  <a href="{{url_for('delete_user_hobbies', user_hobbyid=user_hobby.id)}}">
+    <button>Delete</button></a>
 
 </div>
 

@@ -3,7 +3,7 @@ from flask_wtf import FlaskForm as Form
 from models import Hobby
 from models import User
 
-from wtforms import StringField, PasswordField, TextAreaField, DateTimeField, BooleanField,SubmitField,HiddenField
+from wtforms import StringField, PasswordField, TextAreaField, DateTimeField, BooleanField,SubmitField,HiddenField, IntegerField
 from wtforms.widgets import ListWidget, CheckboxInput
 
 
@@ -77,5 +77,8 @@ class Edit_UserForm(Form):
     username = StringField("User")
     fullname = StringField("Fullname")
     bio = TextAreaField("Bio")
+
+class Hours_SpentForm(Form):
+    hours_spent = IntegerField()
     
 
