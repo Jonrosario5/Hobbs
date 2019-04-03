@@ -94,6 +94,11 @@ def logout():
     flash("You've been logged out", 'success')
     return redirect(url_for('login'))
 
+@app.route('/main',methods=['POST','GET'])
+def main():
+    hobbies = models.Hobby.select()
+    return render_template('main.html',hobbies=hobbies)
+
 
 
 
