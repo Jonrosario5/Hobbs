@@ -96,8 +96,11 @@ def logout():
 
 @app.route('/main',methods=['POST','GET'])
 def main():
+    user_id = g.user._get_current_object().id
+    user_hobbies = models.User_Hobby.select().where(
+        models.User_Hobby.user_id == user_id )
     hobbies = models.Hobby.select()
-    return render_template('main.html',hobbies=hobbies)
+    return render_template('main.html',hobbies=hobbies,user_hobbies=user_hobbies)
 
 
 
