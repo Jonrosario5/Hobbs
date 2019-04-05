@@ -1,9 +1,9 @@
 import os
 from flask import Flask, g
-from flask import render_template, flash, redirect, url_for, request, jsonify
+from flask import render_template, flash, redirect, url_for, request, jsonify, Response, session
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from flask_bcrypt import check_password_hash
-from flask_dance.contrib.meetup import make_meetup_blueprint, meetup
+from flask_oauthlib.client import OAuth
 
 from peewee import *
 
@@ -12,17 +12,26 @@ import forms
 import json
 from datetime import datetime
 
+
+meet_up_key = 'gvl55f70d307mjj4r33cjgf4mh'
+secret = 'u3tsdfb671cob42alba31cdn45'
+
+
+
 DEBUG = True
 PORT = 7000
 
 app = Flask(__name__)
 app.secret_key = 'jonnyBuckets.yum'
 
-meetup_blueprint = make_meetup_blueprint(key='gvl55f70d307mjj4r33cjgf4mh',secret='u3tsdfb671cob42alba31cdn45')
-
-app.register_blueprint(meetup_blueprint, url_prefix='/meetup_login')
-
-
+meetup = oauth.remote_app('meetup',
+    base_url='https://api.meetup.com',
+    request_token_url=' https://api.meetup.com/oauth/request',
+    access_token_url='https://secure.meetup.com/oauth2/access',
+    authorize_url='https://secure.meetup.com/oauth2/authorize',
+    consumer_key='gvl55f70d307mjj4r33cjgf4mh',
+    consumer_secret='u3tsdfb671cob42alba31cdn45'
+)
 
 login_manager = LoginManager()
 # sets up our login for the app
@@ -58,12 +67,34 @@ def after_request(response):
 
 
 @app.route('/meetup')
-def meetup_login():
-    if not meetup.authorized:
-        print('Working?')
-        return redirect(url_for('meetup.login'))
+def login():
+    return meetup.authorize(callback=url_for('oauth_authorized',
+        next=request.args.get('next') or request.referrer or None))
 
-    return '<h1>Request Failed<h1>'
+@app.route('/auth/meetup/callback')
+def oauth_authorized():
+    next_url = request.args.get('next') or url_for('welcome')
+    resp = meetup.authorized_response()
+    if resp is None:
+        flash(u'You denied the request to sign in.')
+        return redirect(next_url)
+
+    # add some information to the session
+    session['meetup_token'] = (
+        resp['oauth_token'],
+        resp['oauth_token_secret']
+    )
+
+    return redirect(next_url)
+
+@meetup.tokengetter
+def get_meetup_token(token=None):
+    return session.get('meetup_token')
+
+@app.route('/welcome')
+def welcome():
+    return "<h1>WELCOME!</h1>"
+
 
 @app.route('/')
 def testing():
