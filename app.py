@@ -3,6 +3,8 @@ from flask import Flask, g
 from flask import render_template, flash, redirect, url_for, request, jsonify
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from flask_bcrypt import check_password_hash
+from flask_dance.contrib.meetup import make_meetup_blueprint, meetup
+
 from peewee import *
 
 import models
@@ -16,10 +18,18 @@ PORT = 7000
 app = Flask(__name__)
 app.secret_key = 'jonnyBuckets.yum'
 
+meetup_blueprint = make_meetup_blueprint(key='gvl55f70d307mjj4r33cjgf4mh',secret='u3tsdfb671cob42alba31cdn45')
+
+app.register_blueprint(meetup_blueprint, url_prefix='/meetup_login')
+
+
+
 login_manager = LoginManager()
 # sets up our login for the app
 login_manager.init_app(app)
 login_manager.login_view = 'login'
+
+
 
 
 @login_manager.user_loader
@@ -47,6 +57,13 @@ def after_request(response):
     return response
 
 
+@app.route('/meetup')
+def meetup_login():
+    if not meetup.authorized:
+        print('Working?')
+        return redirect(url_for('meetup.login'))
+
+    return '<h1>Request Failed<h1>'
 
 @app.route('/')
 def testing():
