@@ -1,3 +1,4 @@
+import os
 from flask import Flask, g
 from flask import render_template, flash, redirect, url_for, request, jsonify
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
