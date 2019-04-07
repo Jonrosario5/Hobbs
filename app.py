@@ -13,20 +13,17 @@ import json
 from datetime import datetime
 
 
-meet_up_key = 'gvl55f70d307mjj4r33cjgf4mh'
-secret = 'u3tsdfb671cob42alba31cdn45'
-
-
-
 DEBUG = True
 PORT = 7000
 
 app = Flask(__name__)
 app.secret_key = 'jonnyBuckets.yum'
+oauth = OAuth()
+
 
 meetup = oauth.remote_app('meetup',
     base_url='https://api.meetup.com',
-    request_token_url=' https://api.meetup.com/oauth/request',
+    request_token_url='https://api.meetup.com/oauth/request/',
     access_token_url='https://secure.meetup.com/oauth2/access',
     authorize_url='https://secure.meetup.com/oauth2/authorize',
     consumer_key='gvl55f70d307mjj4r33cjgf4mh',
@@ -67,7 +64,7 @@ def after_request(response):
 
 
 @app.route('/meetup')
-def login():
+def meetup_login():
     return meetup.authorize(callback=url_for('oauth_authorized',
         next=request.args.get('next') or request.referrer or None))
 
@@ -80,10 +77,10 @@ def oauth_authorized():
         return redirect(next_url)
 
     # add some information to the session
-    session['meetup_token'] = (
-        resp['oauth_token'],
-        resp['oauth_token_secret']
-    )
+    # session['meetup_token'] = (
+    #     resp['oauth_token'],
+    #     resp['oauth_token_secret']
+    # )
 
     return redirect(next_url)
 
