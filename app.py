@@ -4,6 +4,7 @@ from flask import render_template, flash, redirect, url_for, request, jsonify
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from flask_bcrypt import check_password_hash
 from flask_dance.contrib.meetup import make_meetup_blueprint, meetup
+from flask_bootstrap import Bootstrap
 
 from peewee import *
 
@@ -17,6 +18,7 @@ PORT = 7000
 
 app = Flask(__name__)
 app.secret_key = 'jonnyBuckets.yum'
+Bootstrap(app)
 
 meetup_blueprint = make_meetup_blueprint(key='gvl55f70d307mjj4r33cjgf4mh',secret='u3tsdfb671cob42alba31cdn45')
 
@@ -160,9 +162,12 @@ def user_profile():
     hours_spent_form = forms.Hours_SpentForm()
     hobbies = models.Hobby.select()
     user_hobbies = models.User_Hobby.select().where(models.User_Hobby.user == user_id)
+    user_hobbies_count = user_hobbies.count()
+    user_events = models.User_Event.select().where(models.User_Event.user == user_id)
+    user_events_count = user_events.count()
 
 
-    return render_template ('profile.html',form=form,user=user,hobbies=hobbies,user_hobbies=user_hobbies,hours_spent_form=hours_spent_form)
+    return render_template ('profile.html',form=form,user=user,hobbies=hobbies,user_hobbies=user_hobbies,hours_spent_form=hours_spent_form,user_hobbies_count=user_hobbies_count,user_events_count=user_events_count)
 
 
 @app.route('/userupdate',methods=['GET','POST'])

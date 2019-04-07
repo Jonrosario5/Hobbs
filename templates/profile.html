@@ -1,33 +1,52 @@
-{% from 'macros.html' import render_field, render_all_hobbies, render_user_hobbies %} {% block content %}
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% from 'macros.html' import render_field, render_all_hobbies, render_user_hobbies %} 
 
 
-<!DOCTYPE html>
- <html class="no-js"> 
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>User Page</title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="">
-    </head>
-    <body>
-        <h1>User Profile</h1>
-        <img src="https://media1.giphy.com/media/GgbCiS1rMjGFy/giphy.gif?cid=790b76115ca67152596777326f811ac9"
+{% block content %}
+        {% include 'nav.html' %}
+        <div class="container user_profile" 
+        style=
+        "display: flex;
+        flex-direction: column;
+        align-items: center;">
+        
+
+        <div class="card" style="display:flex; flex-direction:column;align-items:center">
+        <img class="card-img-top" src="https://media1.giphy.com/media/GgbCiS1rMjGFy/giphy.gif?cid=790b76115ca67152596777326f811ac9"
              style="border-radius:50%"
         >
+        <div class="card-body">
         <h2>{{user.fullname}}</h2>
         <h3>{{user.username}}</h3>
-        <h3>{{user.bio}}</h3>
+        <h3>{{user.bio}}</h3>   
+    </div>
+    </div>
 
-        <form method="POST" action="{{ url_for('edit_user')}}">
-        {{form.username (value=user.username)}}
-        {{form.fullname (value=user.fullname)}}
-        {{form.bio (placeholder=user.bio)}}
-        <input type="submit" value="Edit">
-        </form>
-        <a href="{{url_for('delete_user')}}">Delete Account</a>
+            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapse_form" aria-expanded="false" aria-controls="collapse_form">
+              Edit User Info
+            </button>
+          </p>
+          <div class="collapse" id="collapse_form">
+            <div class="card card-body">
+                    <form method="POST" action="{{ url_for('edit_user')}}">
+                            {{form.csrf_token}}
+                            {{ wtf.form_field(form.username, value=user.username)}}
+                            {{ wtf.form_field(form.fullname, value=user.fullname)}}
+                            {{wtf.form_field(form.bio, placeholder=user.bio)}}
+                
+                        <input class="btn btn-primary" type="submit" value="Edit">
+                        </form>
+            </div>
+          </div>
+
+        <a href="{{url_for('delete_user')}}"><button type="button" class="btn btn-danger">Delete Account</button></a>
         <br>
+        <br>
+        {% include 'user_nav.html' %}
+
+        <br>
+    <div class=" container user_hobbies_list" style="display:none">
         <h2>User Hobbies</h2>
         User_Hobbies Here
 
@@ -35,15 +54,25 @@
         {{ render_user_hobbies(user_hobby,hours_spent_form) }}
         {% endfor %}
 
+
+
         <h3>Add Hobbies</h3>
         <div>
             {% for hobby in hobbies %}
             {{ render_all_hobbies(hobby)}}
             {% endfor %}
         </div>
+    </div>
 
+    <div class="user_events_list" style="display:none">
+        <h1>
+            Hello
+        </h1>
+    </div>
+ </div>
+        {% block scripts %}
+        {{super()}}
+        <script src="../static/app.js"></script>
+        {% endblock %}
         
-        <script src="" async defer></script>
-    </body>
-</html>
 {% endblock %}

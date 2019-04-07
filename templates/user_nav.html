@@ -1,0 +1,18 @@
+{% extends "bootstrap/base.html" %}
+
+{% block navbar %}
+
+<div class=" container navbar" style="display:flex; flex-direction:row;justify-content: space-around">
+    
+    <a  id="user_hobbies_button">Hobbies - {{user_hobbies_count}}</a>  
+    <a style="border-image-slice: 100%" id="user_events_button">Events - {{ user_events_count }}</a>
+
+</div>
+
+{% block scripts %}
+{{super()}}
+<script src="../static/style.css"></script>
+{% endblock %}
+
+{% endblock %}
+
