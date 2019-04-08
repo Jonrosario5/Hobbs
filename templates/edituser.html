@@ -1,0 +1,58 @@
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% from 'macros.html' import render_field, render_all_hobbies, render_user_hobbies %} 
+
+{% block content %}
+
+{% include 'nav.html' %}
+<div class="container main">
+    <div class="container settings_toggles" style="
+        display:flex; 
+        flex-direction: 
+        column;">
+        <h1>Settings</h1>
+        <ul style="
+        list-style:none; 
+        margin: 30px;
+        padding: 0px">
+            <li><a id="edit_user_details">Account</a></li>
+            <li><a id="add_hobbies_button">Hobbies</a></li>
+            <li><a>Deactivate</a></li>
+        </ul>
+
+    </div>
+    <div class="container settings_display">
+        <div class="row edit_form" style="display:none">
+                <div class="card card-body">
+                        <form method="POST" action="{{ url_for('edit_user')}}">
+                                {{form.csrf_token}}
+                                {{ wtf.form_field(form.username, value=user.username)}}
+                                {{ wtf.form_field(form.fullname, value=user.fullname)}}
+                                {{wtf.form_field(form.bio, placeholder=user.bio)}}
+                    
+                            <input class="btn btn-primary" type="submit" value="Edit">
+                            </form>
+                </div>
+
+        </div>
+        <div class="row add_hobbies" style="display:none">
+            <h3>Add Hobbies</h3>
+                <div>
+                    {% for hobby in hobbies %}
+                    {{ render_all_hobbies(hobby)}}
+                    {% endfor %}
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% block scripts %}
+{{super()}}
+<script src="../static/settings.js"></script>
+{% endblock %}
+
+{% endblock %}

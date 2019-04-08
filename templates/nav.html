@@ -2,19 +2,23 @@
 
 {% block navbar %}
 
-<nav class="navbar navbar-light" style="
-background-color: #3c3ff1;
-background-image: linear-gradient(81deg,#ffd51f,transparent);
+<nav class="navbar navbar-dark container" style="
+background-color: #4d4d4d;
 position:sticky;
-display: flex">
-        <img class="float-left" alt="Responsive image" src="../static/Hobbs3.0.png" width="100" height="100">
+display: flex;
+width: 100%;
+border-bottom: 1px solid;
+margin:0px">
+        
+        <img class="float-left" alt="Responsive image" src="../static/Hobbs5.0.png" width="100" height="100" style="font-size:30px;">
         
         {% if current_user.is_authenticated %}
 
-        <div class="container text-center" style="align-self:flex-end">
-            <a class="nav-item" href="" style="color: white" >Home</a>
-            <a class="nav-item" href="{{ url_for('main') }}" style="color: #3c3ff1">Interests</a>
-            <a class="nav-item" href="{{ url_for('user_profile') }}" style="color: #ffd51f">Profile</a>
+        <div class="container text-center" style="
+        align-self: center;">
+            <a class="nav-item navList" href="{{ url_for('home') }}" style="margin: 10px" ><button class="btn btn-primary">Home</button></a>
+            <a class="nav-item navList" href="{{ url_for('main') }}" style="margin: 10px"><button class="btn btn-primary">Interests</button></a>
+            <a class="nav-item navList" href="{{ url_for('user_profile') }}" style="margin: 10px"><button class="btn btn-primary">Profile</button></a>
         </div>
         <div style="align-self:center">
             <a href="{{ url_for('logout') }}" class="btn btn-danger">Logout</a>
@@ -26,6 +30,7 @@ display: flex">
         {% endif %}
 
 </nav>
+
 
 
 {% endblock %}

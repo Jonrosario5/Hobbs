@@ -1,39 +1,36 @@
-<!DOCTYPE html>
- <html class="no-js"> <!--<![endif]-->
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title></title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="">
-    </head>
-    <body>
-            {% include 'nav.html' %}
+{% extends "bootstrap/base.html" %}
 
+{% include 'nav.html' %}
 
-        <div>Work in Progress</div>
+{% block content %}
+
+    <div>Work in Progress</div>
 
         <div class="container">
 
-            <header>
-            </header>
-            <section class="hobbies-videos" style="display:flex; flex-direction:column; text-align: center ">
+            <section class="container hobbies-videos" style="display:flex; flex-direction:column; text-align: center ">
             {% for user_hobby in user_hobbies %}
 
-            <div class={{user_hobby.hobby.name}} data-hobby={{user_hobby.hobby.name}} >
-
+            <div class={{user_hobby.hobby.name}} class="row" data-hobby={{user_hobby.hobby.name}} >
+                <a href="#">
+                    <img class="img-thumbnail" src="../static/Hobbs.png" style="border-radius:50%;background-color: #1d5ade" width="400em" height="400em">
+                 </a>
                 <h2>{{user_hobby.hobby.name}}</h2>
 
+                <main class="video" data-hobby='hi'>
+        
+                    </main>
+                    
+                <div class="col">
+                    <button>Starter Videos</button>
+                    <button>Expert Videos</button>
+                    <button>Events</button>
 
-                
+                    </div>
+
                 </div>
                 <br>
 
-                        
-            <main class="video" data-hobby='hi'>
-        
-            </main>
            
             
 
@@ -44,14 +41,12 @@
         </div>
 
 
-        
 
-        <script 
-        src="http://code.jquery.com/jquery-3.3.1.min.js"
-        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-        crossorigin="anonymous"></script>
+    {% block scripts %}
+        {{super()}}
+        <script src="../static/mainpage.js"></script>
+    {% endblock %}
 
-        <script src="../static/app.js"></script>
+{% endblock %}
+
         
-    </body>
-</html>

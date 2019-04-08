@@ -68,7 +68,7 @@ def meetup_login():
     return '<h1>Request Failed<h1>'
 
 @app.route('/')
-def testing():
+def home():
     return('Hi Jon')
 
 @app.route('/signup', methods=["POST","GET"])
@@ -136,7 +136,7 @@ def hobbies():
             high_startup_cost = form.high_startup_cost.data,
             group_activity = form.group_activity.data
             )
-        return redirect(url_for('testing')) 
+        return redirect(url_for('home')) 
     return render_template('hobby.html', form=form)
 
 
@@ -151,7 +151,7 @@ def events():
             location=form.location.data,
             details=form.details.data)
             
-        return redirect(url_for('testing')) 
+        return redirect(url_for('home')) 
     return render_template('event.html',form=form)
 
 @app.route('/profile',methods=['GET','POST'])
@@ -169,11 +169,20 @@ def user_profile():
 
     return render_template ('profile.html',form=form,user=user,hobbies=hobbies,user_hobbies=user_hobbies,hours_spent_form=hours_spent_form,user_hobbies_count=user_hobbies_count,user_events_count=user_events_count)
 
+@app.route('/settings',methods=["GET","POST"])
+def settings():
+    form = forms.Edit_UserForm()
+    user = g.user._get_current_object()
+    hobbies = models.Hobby.select()
+
+    return render_template('edituser.html',form=form,user=user,hobbies=hobbies)
+
 
 @app.route('/userupdate',methods=['GET','POST'])
 def edit_user():
     form = forms.Edit_UserForm()
     user_id = g.user._get_current_object().id
+    hobbies = models.Hobby.select()
     print(user_id)
     print(form.bio.data)
 
@@ -188,7 +197,7 @@ def edit_user():
         update_user.execute()
 
         return redirect(url_for('user_profile'))
-
+    
 @app.route('/deleteuser',methods=["GET", "POST"])
 def delete_user():
     user_id = g.user._get_current_object().id

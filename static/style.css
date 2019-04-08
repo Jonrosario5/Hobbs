@@ -1,4 +1,4 @@
-#user_nav_tags :hover {
+.user_hobbies_button :hover {
     color:#3c3ff1;
     cursor: pointer;
 }

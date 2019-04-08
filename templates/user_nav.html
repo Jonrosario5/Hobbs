@@ -2,16 +2,29 @@
 
 {% block navbar %}
 
-<div class=" container navbar" style="display:flex; flex-direction:row;justify-content: space-around">
+<div class=" container navbar" style="
+display:flex; 
+flex-direction:row;
+justify-content: space-around;
+border-bottom: 2px solid black;
+font-weight: 700;
+padding-top:10%">
     
-    <a  id="user_hobbies_button">Hobbies - {{user_hobbies_count}}</a>  
-    <a style="border-image-slice: 100%" id="user_events_button">Events - {{ user_events_count }}</a>
+    <a id="user_hobbies_button" style="
+    color: #1d5ade;
+    cursor: pointer;
+    ">Hobbies - {{user_hobbies_count}}</a>  
+    <a id="user_events_button" style="
+    color: #1d5ade;
+    cursor: pointer;
+    ">Events - {{ user_events_count }}</a>
 
 </div>
 
 {% block scripts %}
-{{super()}}
 <script src="../static/style.css"></script>
+{{super()}}
+
 {% endblock %}
 
 {% endblock %}

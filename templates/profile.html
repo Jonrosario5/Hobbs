@@ -5,48 +5,68 @@
 
 {% block content %}
         {% include 'nav.html' %}
-        <div class="container user_profile" 
+        <div class="container-fluid one user_profile" 
         style=
         "display: flex;
+        width: 100%;
+        padding: 0px;
         flex-direction: column;
-        align-items: center;">
+        align-items: center;
+        background: lightgray;
+        margin-top:0px"
         
-
-        <div class="card" style="display:flex; flex-direction:column;align-items:center">
-        <img class="card-img-top" src="https://media1.giphy.com/media/GgbCiS1rMjGFy/giphy.gif?cid=790b76115ca67152596777326f811ac9"
-             style="border-radius:50%"
         >
-        <div class="card-body">
-        <h2>{{user.fullname}}</h2>
-        <h3>{{user.username}}</h3>
-        <h3>{{user.bio}}</h3>   
+
+        <div class="container user-card" style="
+        position: relative;
+        display:flex;
+        width: 100%;
+        justify-content: center;
+        background-image: linear-gradient(81deg,#de201d,transparent);
+        background-color: #1d5ade;
+        ">
+        
+        <div class="row" style="
+        display:flex;
+        justify-content: space-between; 
+        margin: 20px 50px -50px; 
+        background-color: white;
+        width: 100%">
+            
+                <div class="col user_image">
+                    <img src="../static/Hobbs3.0.png" width="150px" height="200px" style="border-radius:50%; background:yellow"/>
+
+                </div>
+                <div class="col user_info" style="
+                text-align:center;
+                align-self: center; 
+                color:red;">
+                    <h6>@{{user.username}}</h6>
+                    <h3>{{user.fullname}}</h3>
+                    <h5>{{user.bio}}</h5>
+
+                </div>
+                <div class="col" style="align-self:center">
+                    <a href="{{ url_for('settings') }}"> 
+                    <button  class="btn btn-primary" style="
+                        border-radius:50%;
+                        background-color: #1d5ade">
+                        Edit Account</button>
+                    </a>
+                </div>
+
+
+           
+
+        </div>
     </div>
-    </div>
+    <br>
+    <br>
 
-            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapse_form" aria-expanded="false" aria-controls="collapse_form">
-              Edit User Info
-            </button>
-          </p>
-          <div class="collapse" id="collapse_form">
-            <div class="card card-body">
-                    <form method="POST" action="{{ url_for('edit_user')}}">
-                            {{form.csrf_token}}
-                            {{ wtf.form_field(form.username, value=user.username)}}
-                            {{ wtf.form_field(form.fullname, value=user.fullname)}}
-                            {{wtf.form_field(form.bio, placeholder=user.bio)}}
-                
-                        <input class="btn btn-primary" type="submit" value="Edit">
-                        </form>
-            </div>
-          </div>
+    {% include 'user_nav.html' %}
 
-        <a href="{{url_for('delete_user')}}"><button type="button" class="btn btn-danger">Delete Account</button></a>
-        <br>
-        <br>
-        {% include 'user_nav.html' %}
 
-        <br>
-    <div class=" container user_hobbies_list" style="display:none">
+    <div class=" container user_hobbies_list">
         <h2>User Hobbies</h2>
         User_Hobbies Here
 
@@ -56,12 +76,7 @@
 
 
 
-        <h3>Add Hobbies</h3>
-        <div>
-            {% for hobby in hobbies %}
-            {{ render_all_hobbies(hobby)}}
-            {% endfor %}
-        </div>
+        
     </div>
 
     <div class="user_events_list" style="display:none">
@@ -69,10 +84,12 @@
             Hello
         </h1>
     </div>
+
  </div>
+
         {% block scripts %}
         {{super()}}
-        <script src="../static/app.js"></script>
+        <script src="../static/user_navbar.js"></script>
         {% endblock %}
         
 {% endblock %}
