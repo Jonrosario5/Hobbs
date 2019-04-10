@@ -33,6 +33,28 @@
 
 {% endmacro %} 
 
+{% macro render_user_followers(user_follower) %}
+
+<div>
+  <a href="{{url_for('user_profile', userid=user_follower.follower.id)}}"">
+    <h1>{{user_follower.follower.username}}</h1>
+   </a>
+</div>
+
+{% endmacro %} 
+
+{% macro render_user_followings(user_following) %}
+
+<div>
+  <a href="{{url_for('user_profile', userid=user_following.user.id)}}"">
+    <h1>{{user_following.user.username}}</h1>
+   </a>
+</div>
+
+{% endmacro %} 
+
+
+
 {% macro render_non_current_user_hobbies(user_hobby) %}
 
 <div>

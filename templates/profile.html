@@ -1,6 +1,6 @@
 {% extends "bootstrap/base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
-{% from 'macros.html' import render_field, render_all_hobbies, render_user_hobbies,render_non_current_user_hobbies %} 
+{% from 'macros.html' import render_field, render_all_hobbies, render_user_hobbies,render_non_current_user_hobbies,render_user_followers,render_user_followings %} 
 
 
 {% block content %}
@@ -12,7 +12,6 @@
         padding: 0px;
         flex-direction: column;
         align-items: center;
-        background: lightgray;
         margin-top:0px"
         
         >
@@ -21,6 +20,7 @@
         position: relative;
         display:flex;
         width: 100%;
+        border: 2px solid black;
         justify-content: center;
         background-image: linear-gradient(81deg,#de201d,transparent);
         background-color: #1d5ade;
@@ -30,6 +30,8 @@
         display:flex;
         justify-content: space-between; 
         margin: 20px 50px -50px; 
+        border: 2px solid black;
+
         background-color: white;
         width: 100%">
             
@@ -66,13 +68,36 @@
                     </a>
                 </div>
                 {% else %}
-                    <div class="col" style="align-self:center">
-                            <a href="#"> 
-                            <button  class="btn btn-primary" style="
-                                background-color: #1d5ade">
-                                Follow</button>
-                            </a>
-                        </div>
+                    {% for user in user %}
+                    {% if user_followers %}
+                        {% for user_follower in user_followers %}
+                            {% if user_follower.follower_id != not_current_user_id %}
+                                    <div class="col" style="align-self:center">
+                                            <a href="{{ url_for('unfollow_user', userid = user.id) }}"> 
+                                            <button  class="btn btn-danger">
+                                                Unfollow</button>
+                                            </a>
+                                        </div>  
+                            {% else %}
+                                <div class="col" style="align-self:center">
+                                        <a href="{{ url_for('user_followers', userid = user.id) }}"> 
+                                        <button  class="btn btn-primary" style="
+                                            background-color: #1d5ade">
+                                            Follow</button>
+                                        </a>
+                                    </div>
+                                    {% endif %}
+                                    {% endfor %}
+                                    {% else %}
+                                    <div class="col" style="align-self:center">
+                                            <a href="{{ url_for('user_followers', userid = user.id) }}"> 
+                                            <button  class="btn btn-primary" style="
+                                                background-color: #1d5ade">
+                                                Follow</button>
+                                            </a>
+                                        </div>
+                                        {% endif %}
+                                {% endfor %}
                 {% endif %}
 
 
@@ -85,8 +110,8 @@
 
     {% include 'user_nav.html' %}
 
-
-    <div class=" container user_hobbies_list">
+    <div class="d-flex flex-column">
+    <div class=" col user_hobbies_list">
         <h2>User Hobbies</h2>
 
         {% if current_user.id == user.id %}
@@ -105,10 +130,50 @@
         
     </div>
 
-    <div class="user_events_list" style="display:none">
+    <div class="col user_events_list" style="display:none;">
         <h1>
             Hello
         </h1>
+    </div>
+
+    <div class="col user_followers" style="display:none;">
+
+        {% for user_follower in user_followers %}
+            {% if current_user.id != user_follower.follower_id %}
+                
+                {{ render_user_followers(user_follower) }}
+            {% else %}
+
+                {% if not_current_user_id != user_follower.follower_id %}
+                     {{ render_user_followers(user_follower) }}
+
+                     {% endif %}
+            {% endif %}
+            {% endfor %}
+    
+
+    </div>
+
+    <div class="col user_followings" style="display:none;">
+
+            {% for user_following in user_followings %}
+                {% if current_user.id != user_following.user %}
+                    
+                    {{ render_user_followings(user_following) }}
+                {% else %}
+    
+                    {% if not_current_user_id != user_following.user %}
+                         {{ render_user_followings(user_following) }}
+    
+                         {% endif %}
+                {% endif %}
+                {% endfor %}
+        
+    
+        </div>
+
+
+
     </div>
 
  </div>

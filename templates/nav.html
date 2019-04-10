@@ -32,7 +32,11 @@ margin:0px">
 
 </nav>
 
+{% block scripts %}
+<script src="../static/style.css"></script>
+{{super()}}
 
+{% endblock %}
 
 {% endblock %}
 

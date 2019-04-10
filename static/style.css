@@ -2,3 +2,7 @@
     color:#3c3ff1;
     cursor: pointer;
 }
+
+* {
+    height: 100%;
+}

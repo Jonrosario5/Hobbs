@@ -10,7 +10,13 @@
 </a>
 </div>
 <div class="col">
-<span>Hosted By:{{event.created_by.username}}</span>
+<span>
+        {% if current_user.id == event.created_by.id %}
+            Hosted By:<a href="{{url_for('user_profile')}}">{{event.created_by.username}}</a>
+        {% else %}
+            Hosted By:<a href="{{url_for('user_profile', userid = event.created_by.id)}}">{{event.created_by.username}}</a>
+        {% endif %}
+</span>
 <h3>{{event.title}}</h3>
 <h4>{{event.location}}</h4>
 <h5>{{event.event_time}}</h5>

@@ -173,12 +173,17 @@ def events(eventid=None):
 def user_profile(userid = None):
     if userid != None:
         user = models.User.select().where(models.User.id == userid)
+        not_current_user_id = user.get()
         user_hobbies = models.User_Hobby.select().where(models.User_Hobby.user_id == userid)
         user_hobbies_count = user_hobbies.count()
         user_events = models.User_Event.select().where(models.User_Event.user == userid)
         user_events_count = user_events.count()
+        user_followers = models.Follower.select().where(models.Follower.user == userid)
+        user_followings = models.Follower.select().where(models.Follower.follower == userid)
+        user_followers_count = models.Follower.select().where(models.Follower.user == userid).count()
+        user_followings_count = models.Follower.select().where(models.Follower.follower == userid).count()
 
-        return render_template('profile.html', user=user,user_hobbies=user_hobbies,user_hobbies_count=user_hobbies_count,user_events=user_events,user_events_count=user_events_count)
+        return render_template('profile.html', user=user,user_hobbies=user_hobbies,user_hobbies_count=user_hobbies_count,user_events=user_events,user_events_count=user_events_count,user_followers=user_followers,user_followings=user_followings,not_current_user_id=not_current_user_id,user_followers_count=user_followers_count,user_followings_count=user_followings_count)
     else:
         user = g.user._get_current_object()
         user_id = g.user._get_current_object().id
@@ -189,9 +194,12 @@ def user_profile(userid = None):
         user_hobbies_count = user_hobbies.count()
         user_events = models.User_Event.select().where(models.User_Event.user == user_id)
         user_events_count = user_events.count()
+        user_followers = models.Follower.select().where(models.Follower.user == user_id)
+        user_followings = models.Follower.select().where(models.Follower.follower == user_id)
+        user_followers_count = models.Follower.select().where(models.Follower.user == user_id).count()
+        user_followings_count = models.Follower.select().where(models.Follower.follower == user_id).count()
 
-
-        return render_template ('profile.html',form=form,user=user,hobbies=hobbies,user_hobbies=user_hobbies,hours_spent_form=hours_spent_form,user_hobbies_count=user_hobbies_count,user_events_count=user_events_count)
+        return render_template ('profile.html',form=form,user=user,hobbies=hobbies,user_hobbies=user_hobbies,hours_spent_form=hours_spent_form,user_hobbies_count=user_hobbies_count,user_events_count=user_events_count,user_followers=user_followers, user_followings=user_followings,user_followers_count=user_followers_count,user_followings_count=user_followings_count)
 
 @app.route('/settings',methods=["GET","POST"])
 def settings():
@@ -292,7 +300,26 @@ def event_comments():
         return redirect(url_for('events',eventid=form.eventid.data))
 
         
+@app.route('/followers/<userid>',methods=["GET","POSTS"])
+def user_followers(userid):
+    print(userid)
+    follower = g.user._get_current_object().id
 
+    models.Follower.create_user_friend(
+        user=userid,
+        follower=follower
+        )
+
+    return redirect(url_for('user_profile',userid = userid))
+
+@app.route('/unfollow/<userid>', methods=["GET","POST"])
+def unfollow_user(userid):
+    unfollow = models.Follower.delete().where(models.Follower.user_id == g.user._get_current_object().id and
+    models.Follower.user_id == userid)
+    unfollow.execute()
+
+    return redirect(url_for('user_profile',userid = userid))
+ 
                                             
 
 if __name__ == '__main__':
