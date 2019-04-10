@@ -1,0 +1,18 @@
+{% extends "bootstrap/base.html" %}
+
+{% block navbar %}
+
+        <form method="POST" action="{{ url_for('events')}}">
+             {{event_form.csrf_token}}
+             {{ wtf.form_field(event_form.title)}}
+             {{ wtf.form_field(event_form.location)}}
+             {{ wtf.form_field(event_form.details)}}
+             {{ event_form.hobby(value=user_hobby.hobby_id)}}
+             
+            <label class='label level-item'>Start Time</label>
+            <input id="event_time" type="date" name="event_time"/>
+            <input type="submit"/>
+
+         </form> 
+{% endblock %}
+

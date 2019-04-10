@@ -1,0 +1,25 @@
+
+{% block content %}
+
+{% for event in events %}
+{%if (event.hobby_id == user_hobby.hobby_id) %}
+<div class="container">
+<div class="col">
+<a href="{{ url_for('events', eventid = event.id) }}">
+    <img class='img-thumbnail' src="../static/hobbs4.0.png" width="200px" length="200px">
+</a>
+</div>
+<div class="col">
+<span>Hosted By:{{event.created_by.username}}</span>
+<h3>{{event.title}}</h3>
+<h4>{{event.location}}</h4>
+<h5>{{event.event_time}}</h5>
+<p>{{event.details}}
+</p>
+</div>
+</div>
+
+{% endif %}
+{% endfor %}
+
+{% endblock %}

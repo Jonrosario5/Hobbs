@@ -13,6 +13,8 @@ import forms
 import json
 from datetime import datetime
 
+
+
 DEBUG = True
 PORT = 7000
 
@@ -20,7 +22,7 @@ app = Flask(__name__)
 app.secret_key = 'jonnyBuckets.yum'
 Bootstrap(app)
 
-meetup_blueprint = make_meetup_blueprint(key='gvl55f70d307mjj4r33cjgf4mh',secret='u3tsdfb671cob42alba31cdn45')
+meetup_blueprint = make_meetup_blueprint(key='f4d87i8qfkekdm33bj2lq43h',secret='7rm63mchjkl3cj1jtbb39m58iq')
 
 app.register_blueprint(meetup_blueprint, url_prefix='/meetup_login')
 
@@ -69,7 +71,7 @@ def meetup_login():
 
 @app.route('/')
 def home():
-    return('Hi Jon')
+    return render_template('index.html')
 
 @app.route('/signup', methods=["POST","GET"])
 def register():
@@ -116,11 +118,13 @@ def logout():
 
 @app.route('/main',methods=['POST','GET'])
 def main():
+    events = models.Event.select()
     user_id = g.user._get_current_object().id
+    event_form=forms.EventForm()
     user_hobbies = models.User_Hobby.select().where(
         models.User_Hobby.user_id == user_id )
     hobbies = models.Hobby.select()
-    return render_template('main.html',hobbies=hobbies,user_hobbies=user_hobbies)
+    return render_template('main.html',hobbies=hobbies,user_hobbies=user_hobbies,event_form=event_form,events=events)
 
 
 
@@ -141,33 +145,53 @@ def hobbies():
 
 
 @app.route('/event',methods=['GET','POST'])
-def events():
+@app.route('/event/<eventid>',methods=['GET','POST'])
+def events(eventid=None):
     form=forms.EventForm()
-    # Change to API data from Meetup
-    if form.validate_on_submit():
-        models.Event.create_event(
-            title=form.title.data,
-            event_time=request.form.get('event_time'),
-            location=form.location.data,
-            details=form.details.data)
+    if eventid != None:
+        events = models.Event.select().where(models.Event.id == eventid)
+        comments = models.Comments.select().where(models.Comments.event_id == eventid)
+        form = forms.Create_Event_Comments()
+        return render_template("single_event.html",events=events,form=form, comments=comments)
+
+    else:    
+        if form.validate_on_submit():
+            models.Event.create_event(
+                title=form.title.data,
+                event_time=request.form.get('event_time'),
+                location=form.location.data,
+                details=form.details.data,
+                hobby=form.hobby.data,
+                created_by=g.user._get_current_object().id
+                )
             
-        return redirect(url_for('home')) 
+        return redirect(url_for('main')) 
     return render_template('event.html',form=form)
 
 @app.route('/profile',methods=['GET','POST'])
-def user_profile():
-    user = g.user._get_current_object()
-    user_id = g.user._get_current_object().id
-    form = forms.Edit_UserForm()
-    hours_spent_form = forms.Hours_SpentForm()
-    hobbies = models.Hobby.select()
-    user_hobbies = models.User_Hobby.select().where(models.User_Hobby.user == user_id)
-    user_hobbies_count = user_hobbies.count()
-    user_events = models.User_Event.select().where(models.User_Event.user == user_id)
-    user_events_count = user_events.count()
+@app.route('/profile/<userid>',methods=['GET','POST'])
+def user_profile(userid = None):
+    if userid != None:
+        user = models.User.select().where(models.User.id == userid)
+        user_hobbies = models.User_Hobby.select().where(models.User_Hobby.user_id == userid)
+        user_hobbies_count = user_hobbies.count()
+        user_events = models.User_Event.select().where(models.User_Event.user == userid)
+        user_events_count = user_events.count()
+
+        return render_template('profile.html', user=user,user_hobbies=user_hobbies,user_hobbies_count=user_hobbies_count,user_events=user_events,user_events_count=user_events_count)
+    else:
+        user = g.user._get_current_object()
+        user_id = g.user._get_current_object().id
+        form = forms.Edit_UserForm()
+        hours_spent_form = forms.Hours_SpentForm()
+        hobbies = models.Hobby.select()
+        user_hobbies = models.User_Hobby.select().where(models.User_Hobby.user == user_id)
+        user_hobbies_count = user_hobbies.count()
+        user_events = models.User_Event.select().where(models.User_Event.user == user_id)
+        user_events_count = user_events.count()
 
 
-    return render_template ('profile.html',form=form,user=user,hobbies=hobbies,user_hobbies=user_hobbies,hours_spent_form=hours_spent_form,user_hobbies_count=user_hobbies_count,user_events_count=user_events_count)
+        return render_template ('profile.html',form=form,user=user,hobbies=hobbies,user_hobbies=user_hobbies,hours_spent_form=hours_spent_form,user_hobbies_count=user_hobbies_count,user_events_count=user_events_count)
 
 @app.route('/settings',methods=["GET","POST"])
 def settings():
@@ -254,6 +278,21 @@ def hours_spent_increment(user_hobbyid=None):
 
 
     return redirect(url_for('user_profile'))
+
+@app.route('/comments',methods=["GET","POST"])
+def event_comments():
+    userid = g.user._get_current_object().id
+    form = forms.Create_Event_Comments()
+    if form.validate_on_submit:
+        models.Comments.create_comment(
+            user=userid,
+            event=form.eventid.data,
+            body=form.body.data)
+            
+        return redirect(url_for('events',eventid=form.eventid.data))
+
+        
+
                                             
 
 if __name__ == '__main__':

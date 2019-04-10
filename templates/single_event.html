@@ -1,0 +1,48 @@
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block content %}
+
+{% include 'nav.html' %}
+
+{% for event in events %}
+<img src="../static/hobbs4.0.png" width="500px" length="500px">
+<h2>{{event.title}}</h2>
+<h4>{{event.location}}</h4>
+<h4>{{event.details}}</h4>
+<h4>{{event.hobby.name}}</h4>
+<h4>{{event.created_by.username}}</h4>
+<form method="POST" action="{{ url_for('event_comments') }}">
+    {{form.csrf_token}}
+    {{ wtf.form_field(form.body)}}
+    {{ form.eventid(value=event.id)}}
+    <input type="submit"/>
+</form>
+
+    {% for comment in comments %}
+        {% if current_user.id == comment.user_id %}
+        <h4>Posted By:
+            <a href="{{ url_for('user_profile') }}">
+                {{comment.user.username}}
+                </a>
+            </h4>
+            {% else %}
+            <h4>Posted By:
+                    <a href="{{ url_for('user_profile', userid = comment.user_id) }}">
+                        {{comment.user.username}}
+                        </a>
+                    </h4>
+            {% endif %}
+        <p>{{comment.body}}</p>
+
+        {% endfor %}
+
+{% endfor %}
+
+{% block scripts %}
+<script src="../static/style.css"></script>
+{{super()}}
+
+{% endblock %}
+
+{% endblock %}

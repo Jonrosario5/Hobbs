@@ -68,18 +68,18 @@ class User_Hobby(Model):
             hobby=hobby,
             hours_spent=hours_spent
         )
-class User_Friend(Model):
+class Follower(Model):
     user=ForeignKeyField(model=User, backref="user")
-    user_friend=ForeignKeyField(model=User,backref="user_friend")
+    follower=ForeignKeyField(model=User,backref="follower")
 
     class Meta:
         database=DATABASE
     
     @classmethod
-    def create_user_friend(cls,user,user_friend):
+    def create_user_friend(cls,user,follower):
         cls.create(
             user=user,
-            user_friend=user_friend
+            follower=follower
         )
 
 
@@ -89,19 +89,34 @@ class Event(Model):
     location=CharField()
     details=TextField()
     hobby=ForeignKeyField(model=Hobby, backref="hobby") 
+    created_by=ForeignKeyField(model=User, backref="user")
 
     class Meta:
         database=DATABASE
     
     @classmethod
-    def create_event(cls,title,event_time,location,details,hobby):
+    def create_event(cls,title,event_time,location,details,hobby,created_by):
         cls.create(
             title=title,
             event_time=event_time,
             location=location,
             details=details,
-            hobby=hobby)
+            hobby=hobby,
+            created_by=created_by)
+class Comments(Model):
+    body=TextField(200)
+    user=ForeignKeyField(model=User, backref="user")
+    event=ForeignKeyField(model=Event, backref="event")
 
+    class Meta:
+        database=DATABASE
+
+    @classmethod
+    def create_comment(cls,user,event,body):
+        cls.create(
+            user=user,
+            event=event,
+            body=body)
 
 class User_Event(Model):
     user=ForeignKeyField(model=User, backref="user")
@@ -117,9 +132,16 @@ class User_Event(Model):
             event=event
         )
 
+class User_Comments(Model):
+    comment=ForeignKeyField(model=Comments, backref="comment")
+    user=ForeignKeyField(model=User, backref="user")
+
+    class Meta:
+        database=DATABASE
+
 def initialize():
     DATABASE.connect()
-    DATABASE.create_tables([Hobby,User,User_Hobby,User_Friend,Event,User_Event], safe=True)
+    DATABASE.create_tables([Hobby,User,User_Hobby,Follower,Event,User_Event,Comments,User_Comments], safe=True)
     DATABASE.close()
 
 

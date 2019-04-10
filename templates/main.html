@@ -1,4 +1,6 @@
 {% extends "bootstrap/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
 
 {% include 'nav.html' %}
 
@@ -11,28 +13,34 @@
             <section class="container hobbies-videos" style="display:flex; flex-direction:column; text-align: center ">
             {% for user_hobby in user_hobbies %}
 
-            <div class={{user_hobby.hobby.name}} class="row" data-hobby={{user_hobby.hobby.name}} >
+            <div class="{{user_hobby.hobby.name}}" class="row" data-hobby={{user_hobby.hobby.name}} >
                 <a href="#">
                     <img class="img-thumbnail" src="../static/Hobbs.png" style="border-radius:50%;background-color: #1d5ade" width="400em" height="400em">
-                 </a>
+                </a>
                 <h2>{{user_hobby.hobby.name}}</h2>
 
-                <main class="video" data-hobby='hi'>
+                <section class="{{user_hobby.id}}"  style="display: none">
         
-                    </main>
+                </section>
+
+                <section class="create_event" style="display:none;">
+                    {% include 'create_event.html' %}
+                </section>
+                
+                <section class="user_events_by_hobbies" style="display:none;">
+                    {% include 'events.html' %}
+
+                </section>
                     
-                <div class="col">
-                    <button>Starter Videos</button>
-                    <button>Expert Videos</button>
-                    <button>Events</button>
-
-                    </div>
-
+                <div class="col hobbies_buttons">
+                    <button class="render_starter_videos">Starter Videos</button>
+                    <button class="render_expert_videos">Expert Videos</button>
+                    <button class="render_events_button">Events</button>
+                    <button class="create_event_button">Create An Event</button>
                 </div>
-                <br>
 
-           
-            
+            </div>
+            <br>
 
             {% endfor %}
             </section>
@@ -42,10 +50,10 @@
 
 
 
-    {% block scripts %}
+    <!-- {% block scripts %}
         {{super()}}
         <script src="../static/mainpage.js"></script>
-    {% endblock %}
+    {% endblock %} -->
 
 {% endblock %}
 

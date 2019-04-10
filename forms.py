@@ -71,7 +71,7 @@ class EventForm(Form):
     title = StringField('Title',validators=[DataRequired()])
     location = StringField('Location')
     details = TextAreaField('Details')
-    hobby=StringField('Hobby')
+    hobby= HiddenField('Hobby')
 
 class Edit_UserForm(Form):
     username = StringField("User")
@@ -80,5 +80,9 @@ class Edit_UserForm(Form):
 
 class Hours_SpentForm(Form):
     hours_spent = IntegerField()
+
+class Create_Event_Comments(Form):
+    body = TextAreaField("Comments")
+    eventid = HiddenField()
     
 

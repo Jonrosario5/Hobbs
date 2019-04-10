@@ -1,10 +1,11 @@
 {% extends "bootstrap/base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
-{% from 'macros.html' import render_field, render_all_hobbies, render_user_hobbies,render_non_current_user_hobbies %} 
+{% from 'macros.html' import render_field, render_all_hobbies, render_user_hobbies %} 
 
 
 {% block content %}
         {% include 'nav.html' %}
+        
         <div class="container-fluid one user_profile" 
         style=
         "display: flex;
@@ -41,39 +42,20 @@
                 text-align:center;
                 align-self: center; 
                 color:red;">
-                {% if current_user.id == user.id %}
+                    {% for user in user %}
                     <h6>@{{user.username}}</h6>
                     <h3>{{user.fullname}}</h3>
                     <h5>{{user.bio}}</h5>
-                {% else %}
-
-                    {% for user in user %}
-                        <h6>@{{user.username}}</h6>
-                        <h3>{{user.fullname}}</h3>
-                        <h5>{{user.bio}}</h5>
                     {% endfor %}
-                {% endif %}
 
                 </div>
-
-                {% if current_user.id == user.id %}
                 <div class="col" style="align-self:center">
-                    <a href="{{ url_for('settings') }}"> 
+                    <a href="#"> 
                     <button  class="btn btn-primary" style="
-                        border-radius:50%;
                         background-color: #1d5ade">
-                        Edit Account</button>
+                        Follow</button>
                     </a>
                 </div>
-                {% else %}
-                    <div class="col" style="align-self:center">
-                            <a href="#"> 
-                            <button  class="btn btn-primary" style="
-                                background-color: #1d5ade">
-                                Follow</button>
-                            </a>
-                        </div>
-                {% endif %}
 
 
            
@@ -88,17 +70,11 @@
 
     <div class=" container user_hobbies_list">
         <h2>User Hobbies</h2>
+        User_Hobbies Here
 
-        {% if current_user.id == user.id %}
-            {% for user_hobby in user_hobbies %}
-            {{ render_user_hobbies(user_hobby) }}
-            {% endfor %}
-        {% else %}
-            {% for user_hobby in user_hobbies %}
-            {{ render_non_current_user_hobbies(user_hobby) }}
-            {% endfor %}
-        {% endif %}
-
+        {% for user_hobby in user_hobbies %}
+        {{ render_user_hobbies(user_hobby) }}
+        {% endfor %}
 
 
 
@@ -112,6 +88,7 @@
     </div>
 
  </div>
+
 
         {% block scripts %}
         {{super()}}
