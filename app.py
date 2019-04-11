@@ -247,13 +247,16 @@ def user_profile(userid = None):
         user_hobbies_count = user_hobbies.count()
         user_events = models.User_Event.select().where(models.User_Event.user == userid)
         user_events_count = user_events.count()
-        # current_follower_id = models.Follower.select().where(models.Follower.user == not_current_user_id and models.Follower.follower == g.user._get_current_object().id ).get()
+        current_follower_id = models.Follower.select().where(models.Follower.user == not_current_user_id and models.Follower.follower == g.user._get_current_object().id ).get()
+        isFollowing = False
+        if current_follower_id != None:
+            isFollowing = True
         user_followers = models.Follower.select().where(models.Follower.user == userid)
         user_followings = models.Follower.select().where(models.Follower.follower == userid)
         user_followers_count = models.Follower.select().where(models.Follower.user == userid).count()
         user_followings_count = models.Follower.select().where(models.Follower.follower == userid).count()
 
-        return render_template('profile.html', user=user,user_hobbies=user_hobbies,user_hobbies_count=user_hobbies_count,user_events=user_events,user_events_count=user_events_count,user_followers=user_followers,user_followings=user_followings,not_current_user_id=not_current_user_id,user_followers_count=user_followers_count,user_followings_count=user_followings_count)
+        return render_template('profile.html', user=user,user_hobbies=user_hobbies,user_hobbies_count=user_hobbies_count,user_events=user_events,user_events_count=user_events_count,user_followers=user_followers,user_followings=user_followings,not_current_user_id=not_current_user_id,user_followers_count=user_followers_count,user_followings_count=user_followings_count, isFollowing=isFollowing)
     else:
         user = g.user._get_current_object()
         user_id = g.user._get_current_object().id

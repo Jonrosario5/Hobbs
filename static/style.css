@@ -1,8 +1,65 @@
-.user_hobbies_button :hover {
-    color:#3c3ff1;
-    cursor: pointer;
+
+body {
+    height: 100%;
+    background-color:wheat;
+
+}
+/* ***************************
+    Main Page
+******************************
+*/
+
+/* ---------------------------------------
+    Hobbies Image Color Randomizer
+------------------------------------------*/
+.hobby_image{
+
+    border-radius:50%;
+    -webkit-animation: random 20s infinite;
+    animation: random 20s infinite; 
+    width:300px;
+    height:300px;
+    
+}
+@keyframes  random {
+   15% { background-color: #de201d; } 
+   30% { background-color: goldenrod; } 
+   45% { background-color: green; } 
+   60% { background-color: teal; }
+   75% { background-color: purple; }  
 }
 
-* {
-    height: 100%;
+.hobby_name {
+    background: white;
+    width: 100%;
+    /* margin-left: 23.5%; */
+    box-shadow: 5px 4px #de201d;
+
+   
+}
+
+.hobby_event_img_main {
+    background-color:olivedrab;
+    width: 54.5%;
+}
+
+.host_name_hobby_main {
+    font-size: 20px;
+    background-color: white;
+}
+
+.hobbies_buttons {
+    display: flex;
+    justify-content: space-around;
+}
+
+.events_container_main {
+    background-color: #e0cd23;
+}
+
+.hobby_event_body_main {
+    display: flex;
+    flex-direction: column;
+    background-color: blue;
+    border: 10px solid white;
 }

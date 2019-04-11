@@ -2,24 +2,34 @@
 {% import "bootstrap/wtf.html" as wtf %}
 
 
+
+
 {% include 'nav.html' %}
 
 {% block content %}
 
-    <div>Work in Progress</div>
+{% block scripts %}
+{{super()}}
 
-        <div class="container">
+<link rel="stylesheet" href="../static/style.css">
+
+<script src="../static/mainpage.js"></script>
+{% endblock %}
+
+
+
+        <div class="container main" >
 
             <section class="container hobbies-videos" style="display:flex; flex-direction:column; text-align: center ">
             {% for user_hobby in user_hobbies %}
 
-            <div class="{{user_hobby.hobby.name}}" class="row" data-hobby={{user_hobby.hobby.name}} >
-                <a href="#">
-                    <img class="img-thumbnail" src="../static/Hobbs.png" style="border-radius:50%;background-color: #1d5ade" width="400em" height="400em">
+            <div class="{{user_hobby.hobby.name}} row"  data-hobby={{user_hobby.hobby.name}} >
+                <a href="#" style="background-color:white">
+                    <img class="img-thumbnail hobby_image" src="../static/Hobbs.png">
                 </a>
-                <h2>{{user_hobby.hobby.name}}</h2>
+                <h2 class="hobby_name">{{user_hobby.hobby.name}}</h2>
 
-                <section class="{{user_hobby.id}}"  style="display: none">
+                <section class="{{user_hobby.id}}"  style="display: none ">
         
                 </section>
 
@@ -50,10 +60,7 @@
 
 
 
-    <!-- {% block scripts %}
-        {{super()}}
-        <script src="../static/mainpage.js"></script>
-    {% endblock %} -->
+
 
 {% endblock %}
 
