@@ -68,36 +68,38 @@
                     </a>
                 </div>
                 {% else %}
-                    {% for user in user %}
+
+                
+                    
                     {% if user_followers %}
                         {% for user_follower in user_followers %}
-                            {% if user_follower.follower_id != not_current_user_id %}
-                                    <div class="col" style="align-self:center">
-                                            <a href="{{ url_for('unfollow_user', userid = user.id) }}"> 
-                                            <button  class="btn btn-danger">
-                                                Unfollow</button>
-                                            </a>
-                                        </div>  
-                            {% else %}
-                                <div class="col" style="align-self:center">
-                                        <a href="{{ url_for('user_followers', userid = user.id) }}"> 
-                                        <button  class="btn btn-primary" style="
-                                            background-color: #1d5ade">
-                                            Follow</button>
-                                        </a>
-                                    </div>
+                            {% if (user_follower.follower_id != current_user.id) %}
+
+                                        <div class="col" style="align-self:center">
+                                                <a href="{{ url_for('user_followers', userid = not_current_user_id) }}"> 
+                                                <button  class="btn btn-primary" style="
+                                                    background-color: #1d5ade">
+                                                    Follow</button>
+                                                </a>
+                                            </div>
+                            {% elif (user_follower.follower_id == current_user.id)  %}
+                            <div class="col" style="align-self:center">
+                                    <a href="{{ url_for('unfollow_user', followerid = user_follower.id, userid = not_current_user_id) }}"> 
+                                    <button  class="btn btn-danger">
+                                        Unfollow</button>
+                                    </a>
+                                </div> 
                                     {% endif %}
                                     {% endfor %}
-                                    {% else %}
+                            {% else %}
                                     <div class="col" style="align-self:center">
-                                            <a href="{{ url_for('user_followers', userid = user.id) }}"> 
+                                            <a href="{{ url_for('user_followers', userid = not_current_user_id) }}"> 
                                             <button  class="btn btn-primary" style="
                                                 background-color: #1d5ade">
                                                 Follow</button>
                                             </a>
                                         </div>
                                         {% endif %}
-                                {% endfor %}
                 {% endif %}
 
 
