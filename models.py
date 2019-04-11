@@ -121,15 +121,17 @@ class Comments(Model):
 class User_Event(Model):
     user=ForeignKeyField(model=User, backref="user")
     event=ForeignKeyField(model=Event, backref="event")
+    isHost = BooleanField()
 
     class Meta:
         database=DATABASE
         
     @classmethod
-    def create_user_event(cls,user,event):
+    def create_user_event(cls,user,event,isHost=True):
         cls.create(
             user=user,
-            event=event
+            event=event,
+            isHost=isHost
         )
 
 class User_Comments(Model):

@@ -1,39 +1,101 @@
 {% extends "bootstrap/base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
+{% from 'macros.html' import render_edit_event_form,render_delete_event_button,render_attend_event_button %} 
+
 
 {% block content %}
 
 {% include 'nav.html' %}
 
 {% for event in events %}
-<img src="../static/hobbs4.0.png" width="500px" length="500px">
-<h2>{{event.title}}</h2>
-<h4>{{event.location}}</h4>
-<h4>{{event.details}}</h4>
-<h4>{{event.hobby.name}}</h4>
-<h4>{{event.created_by.username}}</h4>
-<form method="POST" action="{{ url_for('event_comments') }}">
+<div class= "container">
+<img class="row" src="../static/hobbs4.0.png" width="500px" length="500px">
+<div class="row">
+<h2 class="col">{{event.title}}</h2>
+<h4 class="col">{{event.location}}</h4>
+<h4 class="col">{{event.details}}</h4>
+<h4 class="col">{{event.hobby.name}}</h4>
+<h4 class="col">{{event.created_by.username}}</h4>
+</div>
+<br>
+
+<br>
+<form class="row" method="POST" action="{{ url_for('event_comments') }}">
     {{form.csrf_token}}
     {{ wtf.form_field(form.body)}}
     {{ form.eventid(value=event.id)}}
     <input type="submit"/>
 </form>
+<br>
+
+<div class="row">
+
+    {% if event.created_by.id == current_user.id %}
+        {{ render_delete_event_button(event)}}
+    <button class="btn btn-primary"> Edit</button>
+    <form method="POST" action="{{ url_for('edit_events', eventid = event.id)}}">
+
+            {{edit_event_form.csrf_token}}
+            {{ wtf.form_field(edit_event_form.title,value=event.title)}}
+            {{ wtf.form_field(edit_event_form.location,value=event.location)}}
+            {{ wtf.form_field(edit_event_form.details,placeholder=event.details)}}
+            
+           <label>Start Time</label>
+           <input id="event_time" type="date" name="event_time" value={{event.event_time}}/>
+           <input type="submit"/>
+        
+        </form> 
+
+        {% else %}
+            
+                {{ render_attend_event_button(attending,event) }}
+
+        {% endif %}
+    
+
+</div>
+
 
     {% for comment in comments %}
         {% if current_user.id == comment.user_id %}
+        <div class="col">
+            
         <h4>Posted By:
             <a href="{{ url_for('user_profile') }}">
                 {{comment.user.username}}
                 </a>
             </h4>
+            <p>{{comment.body}}</p>
+            <button class="btn btn-primary">Edit</button>
+
+            <form class="row" method="POST" action="{{ url_for('event_comments', commentsid = comment.id) }}">
+                    {{form.csrf_token}}
+                    {{ wtf.form_field(form.body,placeholder=comment.body)}}
+                    {{ form.eventid(value=comment.event_id)}}
+
+                    <input type="submit"/>
+                </form>
+            <a href="{{ url_for('delete_comments', commentsid = comment.id, eventid = comment.event_id) }}"><button class="btn btn-danger">Delete</button></a>
+
+        </div>
+
             {% else %}
+            <div class="col">
+
             <h4>Posted By:
                     <a href="{{ url_for('user_profile', userid = comment.user_id) }}">
                         {{comment.user.username}}
                         </a>
                     </h4>
+                    <p>{{comment.body}}</p>
+
             {% endif %}
-        <p>{{comment.body}}</p>
+    </div>
+
+    </div>
+
+
+    </div>
 
         {% endfor %}
 

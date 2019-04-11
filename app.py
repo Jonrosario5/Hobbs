@@ -149,10 +149,15 @@ def hobbies():
 def events(eventid=None):
     form=forms.EventForm()
     if eventid != None:
+        user_id = g.user._get_current_object().id
         events = models.Event.select().where(models.Event.id == eventid)
+        attending = models.User_Event.select(models.User_Event.event_id).where(
+        models.User_Event.user_id == user_id)
+
         comments = models.Comments.select().where(models.Comments.event_id == eventid)
         form = forms.Create_Event_Comments()
-        return render_template("single_event.html",events=events,form=form, comments=comments)
+        edit_event_form = forms.EventForm()
+        return render_template("single_event.html",events=events,form=form, comments=comments,edit_event_form=edit_event_form,attending=attending)
 
     else:    
         if form.validate_on_submit():
@@ -164,9 +169,72 @@ def events(eventid=None):
                 hobby=form.hobby.data,
                 created_by=g.user._get_current_object().id
                 )
+
+            event = models.Event.get(models.Event.title == form.title.data)
+
+            models.User_Event.create_user_event(
+                user=g.user._get_current_object(),
+                event=event,
+                isHost=True
+            )
             
         return redirect(url_for('main')) 
     return render_template('event.html',form=form)
+
+@app.route('/edit_event/<eventid>',methods=["GET","POST"])
+def edit_events(eventid):
+
+    form = forms.EventForm()
+    if form.validate_on_submit():
+        update_event = (models.Event.update(
+            {models.Event.title: form.title.data,
+             models.Event.location: form.location.data,
+             models.Event.details: form.details.data,
+             models.Event.event_time: request.form.get('event_time')
+             })
+            .where(models.Event.id == eventid))
+        update_event.execute()
+
+
+    return redirect(url_for('events', eventid=eventid))
+
+@app.route('/delete_event/<eventid>')
+def delete_event(eventid):
+    print("get here")
+    user = g.user._get_current_object()
+
+    delete_user_event = models.User_Event.delete().where(models.User_Event.user_id == user.id and models.User_Event.event_id == eventid)
+    delete_user_event.execute()
+    delete_event_comments = models.Comments.delete().where(models.Comments.event_id == eventid and models.Comments.user_id == user.id)
+    delete_this_event = models.Event.delete().where(models.Event.created_by_id == user.id and models.Event.id == eventid)
+    delete_this_event.execute()
+
+
+    return redirect(url_for('main'))
+
+@app.route('/attend/<eventid>', methods=['GET', 'POST'])
+def attend_event(eventid):
+    user_events_count = models.User_Event.select().where((models.User_Event.user_id ==
+                                                           g.user._get_current_object().id) & (models.User_Event.event_id == eventid)).count()
+
+    if eventid != None and user_events_count <= 0:
+        models.User_Event.create_user_event(
+            user=g.user._get_current_object(),
+            event=eventid,
+            isHost=False
+        )
+    return redirect(url_for('events', eventid=eventid))
+
+@app.route('/unattend/<eventid>', methods=['GET', 'POST'])
+def unattend_event(eventid=None):
+    user = g.user._get_current_object()
+    if eventid != None:
+        unattend_this_event = models.User_Event.delete().where(
+            models.User_Event.user_id == user.id and models.User_Event.event_id == eventid)
+        unattend_this_event.execute()
+
+    return redirect(url_for('events',eventid=eventid))
+
 
 @app.route('/profile',methods=['GET','POST'])
 @app.route('/profile/<userid>',methods=['GET','POST'])
@@ -199,7 +267,7 @@ def user_profile(userid = None):
         user_followers_count = models.Follower.select().where(models.Follower.user == user_id).count()
         user_followings_count = models.Follower.select().where(models.Follower.follower == user_id).count()
 
-        return render_template ('profile.html',form=form,user=user,hobbies=hobbies,user_hobbies=user_hobbies,hours_spent_form=hours_spent_form,user_hobbies_count=user_hobbies_count,user_events_count=user_events_count,user_followers=user_followers, user_followings=user_followings,user_followers_count=user_followers_count,user_followings_count=user_followings_count)
+        return render_template ('profile.html',form=form,user=user,hobbies=hobbies,user_hobbies=user_hobbies,hours_spent_form=hours_spent_form,user_hobbies_count=user_hobbies_count,user_events=user_events,user_events_count=user_events_count,user_followers=user_followers, user_followings=user_followings,user_followers_count=user_followers_count,user_followings_count=user_followings_count)
 
 @app.route('/settings',methods=["GET","POST"])
 def settings():
@@ -288,16 +356,38 @@ def hours_spent_increment(user_hobbyid=None):
     return redirect(url_for('user_profile'))
 
 @app.route('/comments',methods=["GET","POST"])
-def event_comments():
+@app.route('/comments/<commentsid>', methods=["GET","POST"])
+def event_comments(commentsid=None):
     userid = g.user._get_current_object().id
     form = forms.Create_Event_Comments()
-    if form.validate_on_submit:
-        models.Comments.create_comment(
-            user=userid,
-            event=form.eventid.data,
-            body=form.body.data)
+
+    if commentsid != None:
+        if form.validate_on_submit:
+            print("Comment Updated!")
+            update_comments = models.Comments.update({models.Comments.body:form.body.data}).where(models.Comments.id == commentsid)
+            update_comments.execute()
+
+    else:
+        if form.validate_on_submit:
+        
+            models.Comments.create_comment(
+                user=userid,
+                event=form.eventid.data,
+                body=form.body.data)
             
-        return redirect(url_for('events',eventid=form.eventid.data))
+    return redirect(url_for('events',eventid=form.eventid.data))
+
+@app.route('/delete_comment/<commentsid>/<eventid>', methods=["GET","POST"])
+def delete_comments(commentsid,eventid):
+
+    delete_comment = models.Comments.delete().where(models.Comments.user_id == g.user._get_current_object().id and models.Comments.id == commentsid)
+    delete_comment.execute()
+
+    return redirect(url_for('events',eventid=eventid))
+
+
+
+
 
         
 @app.route('/followers/<userid>',methods=["GET","POSTS"])

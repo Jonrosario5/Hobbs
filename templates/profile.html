@@ -1,6 +1,6 @@
 {% extends "bootstrap/base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
-{% from 'macros.html' import render_field, render_all_hobbies, render_user_hobbies,render_non_current_user_hobbies,render_user_followers,render_user_followings %} 
+{% from 'macros.html' import render_field, render_all_hobbies, render_user_hobbies,render_non_current_user_hobbies,render_user_followers,render_user_followings,render_user_events_hosting %} 
 
 
 {% block content %}
@@ -131,9 +131,11 @@
     </div>
 
     <div class="col user_events_list" style="display:none;">
-        <h1>
-            Hello
-        </h1>
+
+            {% for user_event in user_events %}
+                {{render_user_events_hosting(user_event)}}
+            {% endfor %}
+            
     </div>
 
     <div class="col user_followers" style="display:none;">

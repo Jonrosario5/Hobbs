@@ -63,4 +63,58 @@
 
 {% endmacro %} 
 
+{% macro render_edit_event_form(event) %}
+
+<form method="POST" action="{{ url_for('events')}}">
+
+    {{event_form.csrf_token}}
+    {{ wtf.form_field(event_form.title,value=event.title)}}
+    {{ wtf.form_field(event_form.location,value=event.location)}}
+    {{ wtf.form_field(event_form.details,value=event.details)}}
+    
+   <label class='label level-item' value={{event.event_time}}>Start Time</label>
+   <input id="event_time" type="date" name="event_time"/>
+   <input type="submit"/>
+
+</form> 
+
+
+
+{% endmacro %} 
+
+{% macro render_delete_event_button(event) %}
+
+<a href="{{ url_for('delete_event',eventid = event.id)}}"><button class="btn btn-danger">Delete Event</button></a>
+
+{% endmacro %} 
+
+{% macro render_attend_event_button(attending,event) %}
+
+{% if event.id in attending|map(attribute='event_id') %}
+<a
+  class="level-item button is-danger has-text-weight-semibold"
+  href="{{url_for('unattend_event', eventid=event.id)}}"
+  ><button class="btn btn-danger">Unattend</button></a
+>
+{% else %}
+<a
+  class="level-item button is-success has-text-weight-semibold"
+  href="{{url_for('attend_event', eventid=event.id)}}"
+  ><button class="btn btn-primary">Attend</button></a
+>
+{% endif %}
+
+{% endmacro %} 
+
+{% macro render_user_events_hosting(user_event) %}
+
+<div>
+
+  <h2>{{user_event.event.title}}</h2>
+
+</div>
+
+
+{% endmacro %} 
+
 
