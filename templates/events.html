@@ -17,13 +17,14 @@
             Hosted By:<a href="{{url_for('user_profile', userid = event.created_by.id)}}">{{event.created_by.username}}</a>
         {% endif %}
 </span>
-<h2 style="color:yellow;">{{event.title}}</h2>
-<h4 style="background:white; border: 2px solid black;">Event Location - <span>{{event.location}}</span></h4>
+<h1 style="color:yellow;">{{event.title}}</h1>
+<h3 style="background:white; border: 2px solid black;">Event Location - <span>{{event.location}}</span></h3>
 <br>
-<h5 style="background-color: red; color: yellow;">{{event.event_time}}</h5>
+<h3 style="color:yellow">Start Time</h3>
+<h4 style="background-color: red; color: black;">{{event.event_time}}</h4>
 <br>
-<h6>Event Details</h6>
-<p style="background-color:white; border: 2px solid black">{{event.details}}
+<h4 style="color:yellow">Event Details</h4>
+<p style="background-color:white; border: 2px solid black;">{{event.details}}
 </p>
 </div>
 </div>

@@ -5,7 +5,6 @@
 
 
 {% include 'nav.html' %}
-
 {% block content %}
 
 {% block scripts %}
@@ -17,17 +16,24 @@
 {% endblock %}
 
 
+<br>
 
         <div class="container main" >
+            
+            <br>
 
             <section class="container hobbies-videos" style="display:flex; flex-direction:column; text-align: center ">
             {% for user_hobby in user_hobbies %}
-
+            
             <div class="{{user_hobby.hobby.name}} row"  data-hobby={{user_hobby.hobby.name}} >
-                <a href="#" style="background-color:white">
-                    <img class="img-thumbnail hobby_image" src="../static/Hobbs.png">
+                <a href="#">
+                        <img class="hobby_image" src="../static/Hobbs.png">
                 </a>
                 <h2 class="hobby_name">{{user_hobby.hobby.name}}</h2>
+                <br>
+
+                <br>
+
 
                 <section class="{{user_hobby.id}}"  style="display: none ">
         
@@ -41,15 +47,20 @@
                     {% include 'events.html' %}
 
                 </section>
+                <br>
+                <br>
+
                     
                 <div class="col hobbies_buttons">
-                    <button class="render_starter_videos">Starter Videos</button>
-                    <button class="render_expert_videos">Expert Videos</button>
-                    <button class="render_events_button">Events</button>
-                    <button class="create_event_button">Create An Event</button>
+                    <button class="render_starter_videos  btn btn-primary">Starter Videos</button>
+                    <button class="render_expert_videos btn btn-primary">Expert Videos</button>
+                    <button class="render_events_button btn btn-primary">Events</button>
+                    <button class="create_event_button btn btn-primary">Create An Event</button>
                 </div>
 
             </div>
+            <br>
+
             <br>
 
             {% endfor %}

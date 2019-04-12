@@ -93,15 +93,20 @@ $(document).ready(function () {
             var id = item.id.videoId
             var thumb = item.snippet.thumbnails.medium.url
             $(`.${yout.className}`).append(`
+
 							<article class="item" data-key="${id}" title=${query[1]}>
 
                             <iframe width="560" height="315" src="https://www.youtube.com/embed/${id}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-								<div class="details">
-                                    <h4>${title}</h4>
-                                    <p>${description}</p>
+                            <br>
+                                <div class="details">
+                                    <h4 class="videos_title_plate">${title}</h4>
+                                   
+                                    <p class="videos_details_plate">${description}</p>
 								</div>
 
-							</article>
+                            </article>
+
+
 						`);
 
         })

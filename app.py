@@ -247,9 +247,9 @@ def user_profile(userid = None):
         user_hobbies_count = user_hobbies.count()
         user_events = models.User_Event.select().where(models.User_Event.user == userid)
         user_events_count = user_events.count()
-        current_follower_id = models.Follower.select().where(models.Follower.user == not_current_user_id and models.Follower.follower == g.user._get_current_object().id ).get()
+        current_follower_id = models.Follower.select().where(models.Follower.user == not_current_user_id and models.Follower.follower == g.user._get_current_object().id ).exists()
         isFollowing = False
-        if current_follower_id != None:
+        if current_follower_id != False:
             isFollowing = True
         user_followers = models.Follower.select().where(models.Follower.user == userid)
         user_followings = models.Follower.select().where(models.Follower.follower == userid)
@@ -407,11 +407,12 @@ def user_followers(userid):
 
     return redirect(url_for('user_profile',userid = userid))
 
-@app.route('/unfollow/<followerid>/<userid>', methods=["GET","POST"])
-def unfollow_user(followerid,userid):
-    unfollow = models.Follower.delete().where(models.Follower.user_id == g.user._get_current_object().id and
-    models.Follower.id == followerid)
+@app.route('/unfollow/<userid>', methods=["GET","POST"])
+def unfollow_user(userid):
+    unfollow = models.Follower.delete().where(models.Follower.user_id == userid and
+    models.Follower.follower_id == g.user._get_current_object().id)
     unfollow.execute()
+    
 
     return redirect(url_for('user_profile',userid = userid))
  

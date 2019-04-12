@@ -46,18 +46,10 @@
 {% macro render_user_followings(user_following, current_user) %}
 
 <div>
-  <a href="{{url_for('user_profile', userid=user_following.user.id)}}"">
+  <a href="{{url_for('user_profile', userid=user_following.user.id)}}">
     <h1>{{user_following.user.username}}</h1>
    </a>
-   {% if current_user.id == user_following.follower.id %}
 
-   <div class="col" style="align-self:center">
-           <a href="{{ url_for('unfollow_user', followerid = user_following.id, userid = user_following.follower.id) }}"> 
-           <button  class="btn btn-danger">
-               Unfollow</button>
-           </a>
-       </div> 
-      {% endif %}
 </div>
 
 {% endmacro %} 

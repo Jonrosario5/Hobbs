@@ -2,15 +2,15 @@
 
 {% block navbar %}
 
-        <form method="POST" action="{{ url_for('events')}}">
+        <form method="POST" action="{{ url_for('events')}}" style="color:red">
              {{event_form.csrf_token}}
              {{ wtf.form_field(event_form.title)}}
              {{ wtf.form_field(event_form.location)}}
              {{ wtf.form_field(event_form.details)}}
-             {{ event_form.hobby(value=user_hobby.hobby_id)}}
+             {{ event_form.hobby(value=user_hobby.hobby_id,style="color:red")}}
              
-            <label class='label level-item'>Start Time</label>
-            <input id="event_time" type="date" name="event_time"/>
+            <label for="event_time">Start Time</label>
+            <input style="text-align: center;margin-left: 26px;" id="event_time" type="date" name="event_time" class="form-control" />
             <input type="submit"/>
 
          </form> 

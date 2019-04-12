@@ -4,6 +4,17 @@
 
 
 {% block content %}
+
+{% block scripts %}
+{{super()}}
+
+<link rel="stylesheet" href="../static/style.css">
+<script src="../static/user_navbar.js"></script>
+
+
+{% endblock %}
+
+
         {% include 'nav.html' %}
         <div class="container-fluid one user_profile" 
         style=
@@ -69,40 +80,32 @@
                 </div>
                 {% else %}
 
-                
-                    
-                    {% if user_followers %}
-                        {% for user_follower in user_followers %}
-                            {% if (user_follower.follower_id != current_user.id)  %}
-                                        {% if (user_follower.follower_id == current_user.id) and (user_follower.user_id == not_current_user_id)  %}
-                                        <h1>Following</h1>
-                                        {% else %}
+                {% if isFollowing == true %}
 
-                                        <div class="col" style="align-self:center">
-                                                <a href="{{ url_for('user_followers', userid = not_current_user_id) }}"> 
-                                                <button  class="btn btn-primary" style="
-                                                    background-color: #1d5ade">
-                                                    Follow</button>
-                                                </a>
-                                            </div>
-                                    
-                                        {% endif %}
+                <h1>Following</h1>
 
-                                    {% endif %}
-                                    {% endfor %}
-                            {% else %}
-                                    <div class="col" style="align-self:center">
-                                            <a href="{{ url_for('user_followers', userid = not_current_user_id) }}"> 
-                                            <button  class="btn btn-primary" style="
-                                                background-color: #1d5ade">
-                                                Follow</button>
-                                            </a>
-                                        </div>
-                                        {% endif %}
+                <div class="col" style="align-self:center">
+                    <a href="{{ url_for('unfollow_user', userid = not_current_user_id) }}"> 
+                    <button  class="btn btn-danger">
+                        Unfollow</button>
+                    </a>
+                </div> 
+
+                </div>
+
+                {% else %}
+
+                <div class="col" style="align-self:center">
+                    <a href="{{ url_for('user_followers', userid = not_current_user_id) }}"> 
+                    <button  class="btn btn-primary" style="
+                        background-color: #1d5ade">
+                        Follow</button>
+                    </a>
+                </div>
+
                 {% endif %}
-
-
-           
+                {% endif %}
+                           
 
         </div>
     </div>
@@ -181,9 +184,5 @@
 
  </div>
 
-        {% block scripts %}
-        {{super()}}
-        <script src="../static/user_navbar.js"></script>
-        {% endblock %}
-        
+
 {% endblock %}
