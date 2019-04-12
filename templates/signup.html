@@ -1,7 +1,23 @@
-{% from 'macros.html' import render_field %} {% block content %}
+{% extends "bootstrap/base.html" %}
+{% from 'macros.html' import render_field %} 
+
+
+{% block content %}
+
+{% block scripts %}
+{{super()}}
+
+
+<link rel="stylesheet" href="../static/style.css">
+
+<script src="../static/user_navbar.js"></script>
+
+
+{% endblock %}
+
 {% include 'nav.html' %}
 
-<form method="POST">
+<form method="POST" class="sign_up_form">
 {{ form.hidden_tag() }}
 {% for field in form %}
 {{ render_field(field) }}
@@ -9,5 +25,7 @@
 <input date="date" type="date" name="dob"></input>
 <input type="submit">
 </form>
+
+
 
 {% endblock %}

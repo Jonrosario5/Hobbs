@@ -1,15 +1,29 @@
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
 {% from 'macros.html' import render_field %} 
 
+
 {% block content %}
+
+{% block scripts %}
+{{super()}}
+
+<link rel="stylesheet" href="../static/style.css">
+<script src="../static/user_navbar.js"></script>
+
+
+{% endblock %}
+
 {% include 'nav.html' %}
 
-<form method="POST" action="" class="form">
+<form method="POST" action="" class="login_form">
 {{ form.hidden_tag() }}
 {% for field in form %}
 {{ render_field(field) }}
 {% endfor %}
 <input type="submit" id="submit">
 </form>
+
 
 
 {% endblock %}

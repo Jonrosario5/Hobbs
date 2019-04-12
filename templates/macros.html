@@ -1,7 +1,6 @@
-<!-- Macro for form fields -->
 
 {% macro render_field(field) %}
-<div class="field">
+<div class="form-group">
   {% if field.errors %} {% for error in field.errors %}
   <div class="notification error">{{ error }}</div>
   {% endfor %} 
@@ -12,21 +11,23 @@
 {% endmacro %} 
 
 {% macro render_all_hobbies(hobby) %}
-<div>
-  {{hobby.name}}
+<div class="col user_hobbies_list">
+  <h2 class="user_hobbies_label_plate">{{hobby.name}}</h2>
   <br>
-  <a href="{{url_for('add_user_hobbies', hobbyid=hobby.id)}}"><button>Add</button></a>
+  <a class="profile_settings_add_hobby_button" href="{{url_for('add_user_hobbies', hobbyid=hobby.id)}}"><button class="btn btn-primary">Add</button></a>
 </div>
 
 {% endmacro %} 
 
 {% macro render_user_hobbies(user_hobby) %}
 
-<div>
-  {{user_hobby.hobby.name}}
+<div class="col">
 
+   <h1 class="user_hobbies_profile_page">{{user_hobby.hobby.name}}</h1>
 
+</div>
   <br>
+  <div class="col user_hobbies_delete_button">
     <a href="{{url_for('delete_user_hobbies', user_hobbyid=user_hobby.id)}}">
       <button>Delete</button></a>
 </div>
@@ -36,9 +37,10 @@
 {% macro render_user_followers(user_follower) %}
 
 <div>
-  <a href="{{url_for('user_profile', userid=user_follower.follower.id)}}"">
-    <h1>{{user_follower.follower.username}}</h1>
+  <a href="{{url_for('user_profile', userid=user_follower.follower.id)}}">
+    <h3 class="user_follower_username_plate">{{user_follower.follower.username}}</h3>
    </a>
+   <p class="user_follower_bio_plate">{{user_follower.follower.bio}}</p>
 </div>
 
 {% endmacro %} 
@@ -47,8 +49,10 @@
 
 <div>
   <a href="{{url_for('user_profile', userid=user_following.user.id)}}">
-    <h1>{{user_following.user.username}}</h1>
+    <h3 class="user_followings_username_plate">{{user_following.user.username}}</h3>
    </a>
+   <p class="user_followings_bio_plate">{{user_following.user.bio}}</p>
+
 
 </div>
 
@@ -58,8 +62,8 @@
 
 {% macro render_non_current_user_hobbies(user_hobby) %}
 
-<div>
-   <h4>{{user_hobby.hobby.name}}</h4>
+<div class="col">
+   <h1 class="user_hobbies_profile_page">{{user_hobby.hobby.name}}</h1>
   </div>
 
 {% endmacro %} 
@@ -109,11 +113,35 @@
 
 {% macro render_user_events_hosting(user_event) %}
 
-<div>
+{% if user_event.isHost %}
 
-  <h2>{{user_event.event.title}}</h2>
+<div class="col user_event_hosting">
+
+  <h1 class="user_profile_event_header1">Events Hostings</h1>
+
+  <h2 class="user_profile_event_title">{{user_event.event.title}}</h2>
+
+  <h2 class="user_profile_event_hobby">{{user_event.event.hobby.name}}</h2>
+
+  <span class="user_profile_event_time">{{user_event.event.event_time}}</span>
 
 </div>
+
+<br>
+
+{% else %}
+
+<div class="col user_event_attending">
+  <h1 class="user_profile_event_header2">Events Attending</h1>
+  <h2 class="user_profile_event_title">{{user_event.event.title}}</h2>
+  <h2 class="user_profile_event_hobby">{{user_event.event.hobby.name}}</h2>
+  <span class="user_profile_event_time">{{user_event.event.event_time}}</span>
+
+</div>
+<br>
+<div class="col vl"></div>
+
+{% endif %}
 
 
 {% endmacro %} 

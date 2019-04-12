@@ -53,11 +53,11 @@
                 <div class="col user_info" style="
                 text-align:center;
                 align-self: center; 
-                color:red;">
+                color:black">
                 {% if current_user.id == user.id %}
-                    <h6>@{{user.username}}</h6>
-                    <h3>{{user.fullname}}</h3>
-                    <h5>{{user.bio}}</h5>
+                    <h2 style="color:#1d5ade">@{{user.username}}</h2>
+                    <h1 style="color:#de201d">{{user.fullname}}</h1>
+                    <h3>{{user.bio}}</h3>
                 {% else %}
 
                     {% for user in user %}
@@ -114,9 +114,10 @@
 
     {% include 'user_nav.html' %}
 
+    <div class="container">
     <div class="d-flex flex-column">
-    <div class=" col user_hobbies_list">
-        <h2>User Hobbies</h2>
+    <div class=" row user_hobbies_list">
+        <h2 class="user_hobbies_label_plate">User Hobbies</h2>
 
         {% if current_user.id == user.id %}
             {% for user_hobby in user_hobbies %}
@@ -134,7 +135,7 @@
         
     </div>
 
-    <div class="col user_events_list" style="display:none;">
+    <div class="row user_events_list" style="display:none;">
 
             {% for user_event in user_events %}
                 {{render_user_events_hosting(user_event)}}
@@ -142,7 +143,7 @@
             
     </div>
 
-    <div class="col user_followers" style="display:none;">
+    <div class="row user_followers" style="display:none;">
 
         {% for user_follower in user_followers %}
             {% if current_user.id != user_follower.follower_id %}
@@ -160,7 +161,7 @@
 
     </div>
 
-    <div class="col user_followings" style="display:none;">
+    <div class="row user_followings" style="display:none;">
 
             {% for user_following in user_followings %}
                 {% if current_user.id != user_following.user %}
@@ -183,6 +184,8 @@
     </div>
 
  </div>
+</div>
 
+{% include 'footer.html' %}
 
 {% endblock %}

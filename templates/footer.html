@@ -1,0 +1,28 @@
+{% extends "bootstrap/base.html" %}
+
+{% block navbar %}
+
+{% block scripts %}
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+
+<script src="../static/style.css"></script>
+{{super()}}
+
+{% endblock %}
+
+<footer class="footer">
+        <div class="footer_container">
+
+            <h3>Github Profile</h3>
+            <br>
+            <a href="https://github.com/Jonrosario5"><i class="fab fa-github-alt fa-3x" style="margin:1%; height:20px;"></i></a>
+
+            <h3>Project Repo </h3>
+            <a href="https://github.com/Jonrosario5/Hobbs"><i class="fab fa-github-alt fa-3x" style="margin:1%; height:20px;"></i></a>
+
+        </div>
+    
+    </footer>
+
+{% endblock %}
+

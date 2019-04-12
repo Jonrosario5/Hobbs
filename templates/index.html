@@ -1,16 +1,52 @@
-<!DOCTYPE html>
-<html class="no-js"> 
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title></title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="">
-    </head>
-    <body>
-        {% include 'nav.html' %}
-        
-        <script src="" async defer></script>
-    </body>
-</html>
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% from 'macros.html' import render_field, render_all_hobbies, render_user_hobbies,render_non_current_user_hobbies,render_user_followers,render_user_followings,render_user_events_hosting %} 
+
+
+{% block content %}
+
+{% block scripts %}
+{{super()}}
+
+<link rel="stylesheet" href="../static/style.css">
+<script src="../static/user_navbar.js"></script>
+
+
+{% endblock %}
+
+{% include 'nav.html' %}
+<div class="container main">
+<div class="container-fluid main_page_img_wrapper">
+    <div class="header">
+    </div>
+</div>
+
+<div class="container about_section_container ">
+    <div class="row about_section">
+        <div class="col main_text">
+            <section>
+                <h1>Welcome!</h1>
+                <p>My name is Reginald Bartholomew Hobbinton.</p>
+
+                <P>But all my friends call me Hobbs and so can you friend!
+                   It's my life's work to ensure that you progress in all 
+                   of your interested hobbies. Think of me as your hobbies
+                   personal assistant.
+                </P>
+            </section>
+
+        </div>
+        <div class="col ">
+            <img class="about_section_image" src="../static/Hobbs3.0.png"/>
+
+        </div>
+
+    </div>
+
+</div>
+</div>
+
+{% include 'footer.html' %}
+
+       
+{% endblock %}

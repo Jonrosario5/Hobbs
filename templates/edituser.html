@@ -4,6 +4,13 @@
 
 {% block content %}
 
+{% block scripts %}
+{{super()}}
+<link rel="stylesheet" href="../static/style.css">
+
+<script src="../static/settings.js"></script>
+{% endblock %}
+
 {% include 'nav.html' %}
 <div class="container main">
     <div class="container settings_toggles" style="
@@ -17,18 +24,24 @@
         padding: 0px">
             <li><a id="edit_user_details">Account</a></li>
             <li><a id="add_hobbies_button">Hobbies</a></li>
-            <li><a>Deactivate</a></li>
+            <li><a type="button" data-toggle="modal" data-target="#delete_user_modal">Deactivate</a></li>
         </ul>
 
     </div>
+    {% include 'delete_user_modal.html' %}
+    
     <div class="container settings_display">
+        <div class="row image_header">
+
+        </div>
         <div class="row edit_form" style="display:none">
                 <div class="card card-body">
                         <form method="POST" action="{{ url_for('edit_user')}}">
                                 {{form.csrf_token}}
                                 {{ wtf.form_field(form.username, value=user.username)}}
                                 {{ wtf.form_field(form.fullname, value=user.fullname)}}
-                                {{wtf.form_field(form.bio, placeholder=user.bio)}}
+                                <label for="edit_user_bio">Bio</label>
+                                <textarea class="form-control" id="edit_user_bio" name="bio_form">{{user.bio}}</textarea>
                     
                             <input class="btn btn-primary" type="submit" value="Edit">
                             </form>
@@ -36,7 +49,7 @@
 
         </div>
         <div class="row add_hobbies" style="display:none">
-            <h3>Add Hobbies</h3>
+            <h3 class="user_profile_event_header2">Add Hobbies</h3>
                 <div>
                     {% for hobby in hobbies %}
                     {{ render_all_hobbies(hobby)}}
@@ -50,9 +63,7 @@
 
 </div>
 
-{% block scripts %}
-{{super()}}
-<script src="../static/settings.js"></script>
-{% endblock %}
+
+{% include 'footer.html' %}
 
 {% endblock %}

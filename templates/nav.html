@@ -25,9 +25,18 @@ margin:0px">
             <a href="{{ url_for('logout') }}" class="btn btn-danger">Logout</a>
         </div>
         {% else %}
-        <div>
-            login
+        <div class="container text-center" style="
+        align-self: center;">
+
         </div>
+        <div style="align-self:center">
+            <a href="{{ url_for('login') }}" class="btn btn-success">Login</a>
+            
+        </div>
+        <div style="align-self:center">
+                <a href="{{ url_for('register') }}" class="btn btn-primary">Signup</a>
+                
+            </div>
         {% endif %}
 
 </nav>

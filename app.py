@@ -117,6 +117,8 @@ def logout():
     return redirect(url_for('login'))
 
 @app.route('/main',methods=['POST','GET'])
+@login_required
+
 def main():
     events = models.Event.select()
     user_id = g.user._get_current_object().id
@@ -130,6 +132,8 @@ def main():
 
 
 @app.route('/hobby',methods=['GET','POST'])
+@login_required
+
 def hobbies():
     form =forms.HobbyForm()
     if form.validate_on_submit():
@@ -146,6 +150,8 @@ def hobbies():
 
 @app.route('/event',methods=['GET','POST'])
 @app.route('/event/<eventid>',methods=['GET','POST'])
+@login_required
+
 def events(eventid=None):
     form=forms.EventForm()
     if eventid != None:
@@ -182,6 +188,8 @@ def events(eventid=None):
     return render_template('event.html',form=form)
 
 @app.route('/edit_event/<eventid>',methods=["GET","POST"])
+@login_required
+
 def edit_events(eventid):
 
     form = forms.EventForm()
@@ -199,6 +207,8 @@ def edit_events(eventid):
     return redirect(url_for('events', eventid=eventid))
 
 @app.route('/delete_event/<eventid>')
+@login_required
+
 def delete_event(eventid):
     print("get here")
     user = g.user._get_current_object()
@@ -213,6 +223,8 @@ def delete_event(eventid):
     return redirect(url_for('main'))
 
 @app.route('/attend/<eventid>', methods=['GET', 'POST'])
+@login_required
+
 def attend_event(eventid):
     user_events_count = models.User_Event.select().where((models.User_Event.user_id ==
                                                            g.user._get_current_object().id) & (models.User_Event.event_id == eventid)).count()
@@ -226,6 +238,8 @@ def attend_event(eventid):
     return redirect(url_for('events', eventid=eventid))
 
 @app.route('/unattend/<eventid>', methods=['GET', 'POST'])
+@login_required
+
 def unattend_event(eventid=None):
     user = g.user._get_current_object()
     if eventid != None:
@@ -238,6 +252,8 @@ def unattend_event(eventid=None):
 
 @app.route('/profile',methods=['GET','POST'])
 @app.route('/profile/<userid>',methods=['GET','POST'])
+@login_required
+
 def user_profile(userid = None):
     
     if userid != None:
@@ -275,6 +291,8 @@ def user_profile(userid = None):
         return render_template ('profile.html',form=form,user=user,hobbies=hobbies,user_hobbies=user_hobbies,hours_spent_form=hours_spent_form,user_hobbies_count=user_hobbies_count,user_events=user_events,user_events_count=user_events_count,user_followers=user_followers, user_followings=user_followings,user_followers_count=user_followers_count,user_followings_count=user_followings_count)
 
 @app.route('/settings',methods=["GET","POST"])
+@login_required
+
 def settings():
     form = forms.Edit_UserForm()
     user = g.user._get_current_object()
@@ -284,6 +302,8 @@ def settings():
 
 
 @app.route('/userupdate',methods=['GET','POST'])
+@login_required
+
 def edit_user():
     form = forms.Edit_UserForm()
     user_id = g.user._get_current_object().id
@@ -295,7 +315,7 @@ def edit_user():
         update_user = (models.User.update(
             {models.User.fullname: form.fullname.data,
             models.User.username: form.username.data,
-            models.User.bio: form.bio.data})
+            models.User.bio: request.form.get("bio_form")})
             .where(models.User.id == user_id))
         print(update_user)
 
@@ -304,6 +324,8 @@ def edit_user():
         return redirect(url_for('user_profile'))
     
 @app.route('/deleteuser',methods=["GET", "POST"])
+@login_required
+
 def delete_user():
     user_id = g.user._get_current_object().id
     delete_user_button = models.User.delete().where(models.User.id == user_id)
@@ -312,6 +334,8 @@ def delete_user():
     return redirect('signup')
 
 @app.route('/userhobbies/<hobbyid>',methods=["GET","POST"])
+@login_required
+
 def add_user_hobbies(hobbyid=None):
     user_id = g.user._get_current_object().id
 
@@ -334,6 +358,8 @@ def add_user_hobbies(hobbyid=None):
     return redirect(url_for('user_profile'))
 
 @app.route('/remove_user_hobbies/<user_hobbyid>',methods=["GET","POST"])
+@login_required
+
 def delete_user_hobbies(user_hobbyid=None):
     userid = g.user._get_current_object().id
     
@@ -344,6 +370,8 @@ def delete_user_hobbies(user_hobbyid=None):
         return redirect(url_for('user_profile'))
 
 @app.route('/hours_spent/<user_hobbyid>',methods=["GET","POST"])
+@login_required
+
 def hours_spent_increment(user_hobbyid=None):
     userid = g.user._get_current_object().id
     form = forms.Hours_SpentForm()
@@ -362,6 +390,8 @@ def hours_spent_increment(user_hobbyid=None):
 
 @app.route('/comments',methods=["GET","POST"])
 @app.route('/comments/<commentsid>', methods=["GET","POST"])
+@login_required
+
 def event_comments(commentsid=None):
     userid = g.user._get_current_object().id
     form = forms.Create_Event_Comments()
@@ -383,6 +413,8 @@ def event_comments(commentsid=None):
     return redirect(url_for('events',eventid=form.eventid.data))
 
 @app.route('/delete_comment/<commentsid>/<eventid>', methods=["GET","POST"])
+@login_required
+
 def delete_comments(commentsid,eventid):
 
     delete_comment = models.Comments.delete().where(models.Comments.user_id == g.user._get_current_object().id and models.Comments.id == commentsid)
@@ -396,6 +428,8 @@ def delete_comments(commentsid,eventid):
 
         
 @app.route('/followers/<userid>',methods=["GET","POSTS"])
+@login_required
+
 def user_followers(userid):
     print(userid)
     follower = g.user._get_current_object().id
@@ -408,6 +442,8 @@ def user_followers(userid):
     return redirect(url_for('user_profile',userid = userid))
 
 @app.route('/unfollow/<userid>', methods=["GET","POST"])
+@login_required
+
 def unfollow_user(userid):
     unfollow = models.Follower.delete().where(models.Follower.user_id == userid and
     models.Follower.follower_id == g.user._get_current_object().id)
