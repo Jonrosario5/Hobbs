@@ -147,15 +147,27 @@ body{
     background-size: cover
 }
 
+/* ---------------------------------------
+    Image and Header
+------------------------------------------*/
+
 .single_event_image_wrapper{
-    background-color:olivedrab;
-    width: 48.5%;
+    background-color:rgba(255, 0, 0, 0.2);
 }
 
-#single_event_image {
-    width: auto;
-    margin-left: 10%;
+.single_event_image {
+    padding: 0px;
+    border:none;
+    background-color:rgba(255, 0, 0, 0.2) !important;
 }
+
+/* ---------------------------------------
+    End
+------------------------------------------*/
+
+/* ---------------------------------------
+    Event Details
+------------------------------------------*/
 
 .event_details_and_comment_forms {
     display: flex;
@@ -171,14 +183,53 @@ body{
 
 }
 
+.edit_event_modal_header {
+    background-image: url("../static/single_hobby_page_pic.jpg");
+}
+
+/* ---------------------------------------
+    End
+------------------------------------------*/
+
+/* ---------------------------------------
+    Event Comments
+------------------------------------------*/
+
 .create_comment_form {
     width: 50%;
     margin-left: 25%;
 }
 
-.edit_event_modal_header {
-    background-image: url("../static/single_hobby_page_pic.jpg");
+
+
+.create_comment_form {
+    width: 50%;
+    margin-left: 25%;
 }
 
 
+.edit_comments_modal_header {
+    background-image: url("../static/comments.jpg");
+    color:orange;
+}
 
+.comments_post_cards {
+    background-color: white;
+    color: black;
+    box-shadow: 5px 4px red;
+    width: 50%;
+    margin-left: 25%;
+}
+
+.comment_body {
+    margin-top: 15px;
+    height: 100px;
+    width: 25%;
+    margin-left: 38%;
+    background: white;
+    padding-top: 20px;
+}
+
+/* ---------------------------------------
+    End
+------------------------------------------*/

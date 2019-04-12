@@ -18,7 +18,7 @@
 {% for event in events %}
 <div class= "container single_event_page ">
 <div class="imgwrapper single_event_image_wrapper">
-    <img id="single_event_image" src="../static/hobbs4.0.png">
+    <img class="img-thumbnail single_event_image" src="../static/hobbs4.0.png">
 </div>
 </div>
 <div class=" event_details_and_comment_forms">
@@ -35,7 +35,7 @@
                 </span>
                 <br>
                 <br>
-                
+
                 <span class="single_event_details_title_cards"> Hobby - {{event.hobby.name}} </span>
                 <h1 class="single_event_details_title_cards">{{event.title}}</h1>
                 <h3 class="single_event_details_title_cards" >Event Location - <span>{{event.location}}</span></h3>
@@ -50,18 +50,12 @@
             </div>
 <br>
 
-<br>
-<form class="row create_comment_form" method="POST" action="{{ url_for('event_comments') }}">
-    {{form.csrf_token}}
-    {{ wtf.form_field(form.body)}}
-    {{ form.eventid(value=event.id)}}
-    <input type="submit"/>
-</form>
-<br>
+
 
 <div class="row">
 
     {% if event.created_by.id == current_user.id %}
+
         {{ render_delete_event_button(event)}}
 
     <button class="btn btn-primary open_edit_event_button" type="button" data-toggle="modal" data-target="#edit_event_modal"> Edit Event </button>
@@ -77,28 +71,33 @@
 
 
 </div>
+<br>
 
 
+<form class="row create_comment_form" method="POST" action="{{ url_for('event_comments') }}">
+        {{form.csrf_token}}
+        {{ wtf.form_field(form.body)}}
+        {{ form.eventid(value=event.id)}}
+        <input type="submit"/>
+    </form>
 
+    <br>
+    <div class="container">
     {% for comment in comments %}
         {% if current_user.id == comment.user_id %}
         <div class="col">
             
-        <h4>Posted By:
+        <h4 class="comments_post_cards">Posted By:
             <a href="{{ url_for('user_profile') }}">
                 {{comment.user.username}}
                 </a>
             </h4>
-            <p>{{comment.body}}</p>
-            <button class="btn btn-primary">Edit</button>
+            <p class="comment_body">{{comment.body}}</p>
 
-            <form class="row" method="POST" action="{{ url_for('event_comments', commentsid = comment.id) }}">
-                    {{form.csrf_token}}
-                    {{ wtf.form_field(form.body,placeholder=comment.body)}}
-                    {{ form.eventid(value=comment.event_id)}}
+            <button class="btn btn-primary" data-toggle="modal" data-target="#edit_comments_modal" >Edit</button>
 
-                    <input type="submit"/>
-                </form>
+            {% include 'edit_comments_form.html'%}
+
             <a href="{{ url_for('delete_comments', commentsid = comment.id, eventid = comment.event_id) }}"><button class="btn btn-danger">Delete</button></a>
 
         </div>
@@ -106,22 +105,20 @@
             {% else %}
             <div class="col">
 
-            <h4>Posted By:
+            <h4 class="comments_post_cards">Posted By:
                     <a href="{{ url_for('user_profile', userid = comment.user_id) }}">
                         {{comment.user.username}}
                         </a>
                     </h4>
-                    <p>{{comment.body}}</p>
+                    <p class="comment_body"> {{comment.body}} </p>
 
             {% endif %}
-    </div>
-
-
 
         {% endfor %}
 
 {% endfor %}
 
-
+</div>
+</div>
 
 {% endblock %}
