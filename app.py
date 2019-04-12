@@ -263,10 +263,12 @@ def user_profile(userid = None):
         user_hobbies_count = user_hobbies.count()
         user_events = models.User_Event.select().where(models.User_Event.user == userid)
         user_events_count = user_events.count()
-        current_follower_id = models.Follower.select().where(models.Follower.user == not_current_user_id and models.Follower.follower == g.user._get_current_object().id ).exists()
+        current_follower_id = models.Follower.select(models.Follower.id).where(models.Follower.follower_id == g.user._get_current_object().id, models.Follower.user_id == not_current_user_id ).exists()
+        
         isFollowing = False
         if current_follower_id != False:
             isFollowing = True
+
         user_followers = models.Follower.select().where(models.Follower.user == userid)
         user_followings = models.Follower.select().where(models.Follower.follower == userid)
         user_followers_count = models.Follower.select().where(models.Follower.user == userid).count()

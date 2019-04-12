@@ -117,7 +117,7 @@
 
 <div class="col user_event_hosting">
 
-  <h1 class="user_profile_event_header1">Events Hostings</h1>
+  <h1 class="user_profile_event_header1">Hosting Event</h1>
 
   <h2 class="user_profile_event_title">{{user_event.event.title}}</h2>
 
@@ -126,13 +126,12 @@
   <span class="user_profile_event_time">{{user_event.event.event_time}}</span>
 
 </div>
-
 <br>
 
 {% else %}
 
 <div class="col user_event_attending">
-  <h1 class="user_profile_event_header2">Events Attending</h1>
+  <h1 class="user_profile_event_header2">Attending Event</h1>
   <h2 class="user_profile_event_title">{{user_event.event.title}}</h2>
   <h2 class="user_profile_event_hobby">{{user_event.event.hobby.name}}</h2>
   <span class="user_profile_event_time">{{user_event.event.event_time}}</span>
