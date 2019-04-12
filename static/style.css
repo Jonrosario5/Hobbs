@@ -126,3 +126,59 @@ body {
     background-color: #FFFFE0;
 }
 
+≈
+
+body{
+    background-color: #FFFFE0;
+}
+
+/* ***************************
+   Single Event Page
+****************************** */
+
+
+
+.single_event_page{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100% !important;
+    background-image:url("../static/single_event_pic2.jpg");
+    background-size: cover
+}
+
+.single_event_image_wrapper{
+    background-color:olivedrab;
+    width: 48.5%;
+}
+
+#single_event_image {
+    width: auto;
+    margin-left: 10%;
+}
+
+.event_details_and_comment_forms {
+    display: flex;
+    flex-direction: column;
+    text-align: center;;
+}
+
+.single_event_details_title_cards {
+    
+    background-color: white;
+    color:black;
+    box-shadow: 5px 4px darkorange;
+
+}
+
+.create_comment_form {
+    width: 50%;
+    margin-left: 25%;
+}
+
+.edit_event_modal_header {
+    background-image: url("../static/single_hobby_page_pic.jpg");
+}
+
+
+

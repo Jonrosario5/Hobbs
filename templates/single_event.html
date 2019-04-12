@@ -5,22 +5,53 @@
 
 {% block content %}
 
+{% block scripts %}
+
+<link rel="stylesheet" href="../static/style.css">
+
+{{super()}}
+
+{% endblock %}
+
 {% include 'nav.html' %}
 
 {% for event in events %}
-<div class= "container">
-<img class="row" src="../static/hobbs4.0.png" width="500px" length="500px">
-<div class="row">
-<h2 class="col">{{event.title}}</h2>
-<h4 class="col">{{event.location}}</h4>
-<h4 class="col">{{event.details}}</h4>
-<h4 class="col">{{event.hobby.name}}</h4>
-<h4 class="col">{{event.created_by.username}}</h4>
+<div class= "container single_event_page ">
+<div class="imgwrapper single_event_image_wrapper">
+    <img id="single_event_image" src="../static/hobbs4.0.png">
 </div>
+</div>
+<div class=" event_details_and_comment_forms">
+
+        <div class="card single_event_details_card_container">
+
+                <div class="card-body single_event_details ">
+                <span class="card-text single_event_details_title_cards">
+                        {% if current_user.id == event.created_by.id %}
+                            Hosted By:<a href="{{url_for('user_profile')}}" style="color:#1d5ade"> {{event.created_by.username}} </a>
+                        {% else %}
+                            Hosted By:<a href="{{url_for('user_profile', userid = event.created_by.id)}}">{{event.created_by.username}}</a>
+                        {% endif %}
+                </span>
+                <br>
+                <br>
+                
+                <span class="single_event_details_title_cards"> Hobby - {{event.hobby.name}} </span>
+                <h1 class="single_event_details_title_cards">{{event.title}}</h1>
+                <h3 class="single_event_details_title_cards" >Event Location - <span>{{event.location}}</span></h3>
+                <br>
+                <h3 >Start Time</h3>
+                <h4 class="single_event_details_title_cards" >{{event.event_time}}</h4>
+                <br>
+                <h4 >Event Details</h4>
+                <p class="single_event_details_title_cards" >{{event.details}}
+                </p>
+                </div>
+            </div>
 <br>
 
 <br>
-<form class="row" method="POST" action="{{ url_for('event_comments') }}">
+<form class="row create_comment_form" method="POST" action="{{ url_for('event_comments') }}">
     {{form.csrf_token}}
     {{ wtf.form_field(form.body)}}
     {{ form.eventid(value=event.id)}}
@@ -32,28 +63,21 @@
 
     {% if event.created_by.id == current_user.id %}
         {{ render_delete_event_button(event)}}
-    <button class="btn btn-primary"> Edit</button>
-    <form method="POST" action="{{ url_for('edit_events', eventid = event.id)}}">
 
-            {{edit_event_form.csrf_token}}
-            {{ wtf.form_field(edit_event_form.title,value=event.title)}}
-            {{ wtf.form_field(edit_event_form.location,value=event.location)}}
-            {{ wtf.form_field(edit_event_form.details,placeholder=event.details)}}
-            
-           <label>Start Time</label>
-           <input id="event_time" type="date" name="event_time" value={{event.event_time}}/>
-           <input type="submit"/>
-        
-        </form> 
+    <button class="btn btn-primary open_edit_event_button" type="button" data-toggle="modal" data-target="#edit_event_modal"> Edit Event </button>
+
+    {% include 'edit_event_modal.html' %}
+
 
         {% else %}
             
                 {{ render_attend_event_button(attending,event) }}
 
         {% endif %}
-    
+
 
 </div>
+
 
 
     {% for comment in comments %}
@@ -92,19 +116,12 @@
             {% endif %}
     </div>
 
-    </div>
 
-
-    </div>
 
         {% endfor %}
 
 {% endfor %}
 
-{% block scripts %}
-<script src="../static/style.css"></script>
-{{super()}}
 
-{% endblock %}
 
 {% endblock %}
