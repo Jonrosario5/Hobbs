@@ -17,6 +17,7 @@
 {% include 'nav.html' %}
 
 <form method="POST" action="" class="login_form">
+    
 {{ form.hidden_tag() }}
 {% for field in form %}
 {{ render_field(field) }}
