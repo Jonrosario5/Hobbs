@@ -128,7 +128,7 @@ Single Event Page
 
 
 <img src="https://github.com/Jonrosario5/Hobbs/blob/master/jon1.jpg.png" width="300px" />
-<img src="../jon2.jpg.png" width="300px" />
+<img src="https://github.com/Jonrosario5/Hobbs/blob/master/jon2.jpg.png" width="300px" />
 
 
 ---
