@@ -127,8 +127,8 @@ Single Event Page
 ##### Screenshot
 
 
-<img src"../jon1.jpg" width="300px" />
-<img src"../jon2.jpg" width="300px" />
+<img src"../jon1.jpg.png" width="300px" />
+<img src"../jon2.jpg.png" width="300px" />
 
 
 ---
