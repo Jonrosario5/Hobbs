@@ -454,7 +454,10 @@ def unfollow_user(userid):
 
     return redirect(url_for('user_profile',userid = userid))
  
-                                            
+
+if 'ON_HEROKU' in os.environ:
+    print('hitting ')
+    models.initialize()                                          
 
 if __name__ == '__main__':
     models.initialize()

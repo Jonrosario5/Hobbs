@@ -1,10 +1,17 @@
+import os
 import datetime
 from peewee import *
 
 from flask_login import UserMixin
 from flask_bcrypt import generate_password_hash
+from playhouse.db_url import connect
 
-DATABASE = SqliteDatabase('hobbs.db')
+
+# DATABASE = SqliteDatabase('hobbs.db')
+# DATABASE = PostgresqlDatabase('Hobbs')
+DATABASE = connect(os.environ.get('DATABASE_URL'))
+
+
 
 class Hobby(Model):
     name = CharField(50, unique= True)
