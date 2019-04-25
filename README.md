@@ -2,6 +2,8 @@
 
 Hobby Tracking App
 
+<a href="https://hobbington.herokuapp.com/">Live Version</a>
+
 Hobbs is a personal hobby trackering app that allows you to share or build your skills with a community that shares your interests.
 With Hobbs you will be able to track events you're hosting and attending. Videos are available to help you get started or continue your develop. 
 If there is a fellow enthusiast you would like to keep track, Hobbs allows you to follow other users.
