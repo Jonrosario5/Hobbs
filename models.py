@@ -6,6 +6,8 @@ from flask_login import UserMixin
 from flask_bcrypt import generate_password_hash
 from playhouse.db_url import connect
 
+#Adding Comments 
+
 
 # DATABASE = SqliteDatabase('hobbs.db')
 # DATABASE = PostgresqlDatabase('Hobbs')
